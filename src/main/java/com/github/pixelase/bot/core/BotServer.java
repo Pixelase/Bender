@@ -43,11 +43,14 @@ public class BotServer implements Server {
 	}
 
 	private void fetchUpdates() {
-		GetUpdatesResponse getUpdatesResponse = bot.getUpdates(0, 100, 0);
+		int offset = 0;
+		int limit = 2;
+		GetUpdatesResponse getUpdatesResponse = bot.getUpdates(offset, limit, 0);
 		Update currentUpdate = getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1);
 
 		while (getUpdatesResponse.isOk()) {
-			getUpdatesResponse = bot.getUpdates(0, 100, 0);
+			offset = (getUpdatesResponse.updates().size() == limit) ? currentUpdate.updateId() : 0;
+			getUpdatesResponse = bot.getUpdates(offset, limit, 0);
 
 			if (currentUpdate.updateId()
 					.equals(getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1).updateId())) {
