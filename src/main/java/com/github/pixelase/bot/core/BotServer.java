@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.github.pixelase.bot.api.Module;
+import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.Server;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
@@ -20,7 +20,7 @@ public class BotServer implements Server {
 	private Properties properties;
 	private ExecutorService moduleExecutor;
 	private boolean isStarted;
-	private Module[] modules;
+	private ModuleTask[] modules;
 
 	private BotServer() {
 		properties = new Properties();
@@ -28,7 +28,7 @@ public class BotServer implements Server {
 		isStarted = false;
 	}
 
-	public BotServer(String propFilePath, Module... modules) throws IOException {
+	public BotServer(String propFilePath, ModuleTask... modules) throws IOException {
 		this();
 		this.modules = modules;
 
@@ -59,9 +59,9 @@ public class BotServer implements Server {
 			/*
 			 * Update message for each module
 			 */
-			for (Module module : modules) {
-				module.updateMessage(currentUpdate.message());
-				module.updateState(getUpdatesResponse.isOk());
+			for (ModuleTask module : modules) {
+				module.setMessage(currentUpdate.message());
+				module.setOk(getUpdatesResponse.isOk());
 			}
 
 			/*
@@ -79,7 +79,7 @@ public class BotServer implements Server {
 		}
 
 		if (modules.length != 0) {
-			for (Module module : modules) {
+			for (ModuleTask module : modules) {
 				moduleExecutor.submit(module);
 			}
 		}
