@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 
 import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.Server;
+import com.github.pixelase.bot.api.Task;
+import com.github.pixelase.bot.api.UserTask;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
@@ -34,9 +36,15 @@ public class BotServer implements Server {
 
 		File propFile = new File(propFilePath);
 
+		/*
+		 * Reading properties
+		 */
 		if (propFile.exists()) {
 			properties.load(new FileInputStream(propFile));
 			bot = TelegramBotAdapter.build(properties.getProperty("token"));
+			Task.setTaskTimeout(Long.parseLong(properties.getProperty("taskTimeout")));
+			ModuleTask.setModuleTaskTimeout(Long.parseLong(properties.getProperty("moduleTaskTimeout")));
+			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
 		} else {
 			throw new FileNotFoundException("The properties file is not found");
 		}
@@ -44,7 +52,7 @@ public class BotServer implements Server {
 
 	private void fetchUpdates() {
 		int offset = 0;
-		int limit = 2;
+		int limit = 100;
 		GetUpdatesResponse getUpdatesResponse = bot.getUpdates(offset, limit, 0);
 		Update currentUpdate = getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1);
 

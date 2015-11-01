@@ -1,20 +1,15 @@
 package com.github.pixelase.bot.api;
 
-import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 
 public abstract class UserTask extends Task {
+
 	protected final User user;
+	protected static long userTaskTimeout;
 
 	public UserTask(User user) {
-		this(user, null, true);
-	}
-
-	public UserTask(User user, Message message, boolean isOk) {
 		super();
 		this.user = user;
-		this.message = message;
-		this.isOk = isOk;
 	}
 
 	public User getUser() {
@@ -27,6 +22,22 @@ public abstract class UserTask extends Task {
 		int result = 1;
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
+	}
+
+	public static long getTaskTimeout() {
+		return userTaskTimeout;
+	}
+
+	public static void setTaskTimeout(long taskTimeout) {
+		UserTask.userTaskTimeout = taskTimeout;
+	}
+
+	public static long getUserTaskTimeout() {
+		return userTaskTimeout;
+	}
+
+	public static void setUserTaskTimeout(long userTaskTimeout) {
+		UserTask.userTaskTimeout = userTaskTimeout;
 	}
 
 	@Override

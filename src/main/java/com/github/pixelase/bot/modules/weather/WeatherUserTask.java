@@ -11,8 +11,7 @@ public class WeatherUserTask extends UserTask {
 
 	@Override
 	public void run() {
-		System.out.println("ivan govnov");
-//		System.out.printf("From %s task(%s): %s\n", user.username(), this.hashCode(), message.text());
+		System.out.printf("From %s task(%s): %s\n", user.username(), this.hashCode(), message.text());
 	}
 
 }

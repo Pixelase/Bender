@@ -5,6 +5,10 @@ import com.github.pixelase.bot.api.UserTask;
 
 public class WeatherModuleTask extends ModuleTask {
 
+	public WeatherModuleTask() {
+		super();
+	}
+
 	@Override
 	public void run() {
 		/*
@@ -13,6 +17,11 @@ public class WeatherModuleTask extends ModuleTask {
 		UserTask currentUserTask = null;
 
 		while (isOk) {
+			/*
+			 * Fix multithreading
+			 */
+			sleep(moduleTaskTimeout);
+
 			/*
 			 * If message is null we can't get it fields, so skip this
 			 * iteration;
