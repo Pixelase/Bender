@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.Message;
 public abstract class Task implements Runnable {
 	protected Message message;
 	protected boolean isOk;
-	protected static long taskTimeout;
+	protected static long taskDelay;
 
 	public Task() {
 		this(null, true);
@@ -33,12 +33,12 @@ public abstract class Task implements Runnable {
 		this.isOk = isOk;
 	}
 
-	public static long getTaskTimeout() {
-		return taskTimeout;
+	public static long getTaskDelay() {
+		return taskDelay;
 	}
 
-	public static void setTaskTimeout(long taskTimeout) {
-		Task.taskTimeout = taskTimeout;
+	public static void setTaskDelay(long taskDelay) {
+		Task.taskDelay = taskDelay;
 	}
 
 	protected void sleep(long millis) {

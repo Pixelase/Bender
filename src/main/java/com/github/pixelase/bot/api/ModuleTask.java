@@ -11,7 +11,7 @@ import com.pengrad.telegrambot.model.User;
 public abstract class ModuleTask extends Task {
 	protected List<UserTask> userTasks;
 	protected ExecutorService userTaskExecutor;
-	protected static long moduleTaskTimeout;
+	protected static long moduleTaskDelay;
 
 	public ModuleTask() {
 		this(new ArrayList<UserTask>(), Executors.newCachedThreadPool());
@@ -23,12 +23,12 @@ public abstract class ModuleTask extends Task {
 		this.userTaskExecutor = userTaskExecutor;
 	}
 
-	public static long getModuleTaskTimeout() {
-		return moduleTaskTimeout;
+	public static long getModuleTaskDelay() {
+		return moduleTaskDelay;
 	}
 
-	public static void setModuleTaskTimeout(long moduleTaskTimeout) {
-		ModuleTask.moduleTaskTimeout = moduleTaskTimeout;
+	public static void setModuleTaskDelay(long moduleTaskDelay) {
+		ModuleTask.moduleTaskDelay = moduleTaskDelay;
 	}
 
 	protected void startExecution(Class<? extends UserTask> userTaskClass) throws InstantiationException, IllegalAccessException,
@@ -42,7 +42,7 @@ public abstract class ModuleTask extends Task {
 			/*
 			 * Fix multithreading
 			 */
-			sleep(moduleTaskTimeout);
+			sleep(moduleTaskDelay);
 
 			/*
 			 * If message is null we can't get it fields, so skip this

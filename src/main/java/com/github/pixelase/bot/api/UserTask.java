@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.User;
 public abstract class UserTask extends Task {
 
 	protected final User user;
+	protected static long userTaskDelay;
 	protected static long userTaskTimeout;
 
 	public UserTask(User user) {
@@ -38,6 +39,14 @@ public abstract class UserTask extends Task {
 
 	public static void setUserTaskTimeout(long userTaskTimeout) {
 		UserTask.userTaskTimeout = userTaskTimeout;
+	}
+
+	public static long getUserTaskDelay() {
+		return userTaskDelay;
+	}
+
+	public static void setUserTaskDelay(long userTaskDelay) {
+		UserTask.userTaskDelay = userTaskDelay;
 	}
 
 	@Override

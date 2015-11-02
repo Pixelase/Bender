@@ -42,8 +42,9 @@ public class BotServer implements Server {
 		if (propFile.exists()) {
 			properties.load(new FileInputStream(propFile));
 			bot = TelegramBotAdapter.build(properties.getProperty("token"));
-			Task.setTaskTimeout(Long.parseLong(properties.getProperty("taskTimeout")));
-			ModuleTask.setModuleTaskTimeout(Long.parseLong(properties.getProperty("moduleTaskTimeout")));
+			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
+			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
+			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
 			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
 		} else {
 			throw new FileNotFoundException("The properties file is not found");
