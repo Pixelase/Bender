@@ -23,6 +23,7 @@ public class BotServer implements Server {
 	private ExecutorService moduleExecutor;
 	private boolean isStarted;
 	private ModuleTask[] modules;
+	private String propFilePath;
 
 	private BotServer() {
 		properties = new Properties();
@@ -33,22 +34,8 @@ public class BotServer implements Server {
 	public BotServer(String propFilePath, ModuleTask... modules) throws IOException {
 		this();
 		this.modules = modules;
-
-		File propFile = new File(propFilePath);
-
-		/*
-		 * Reading properties
-		 */
-		if (propFile.exists()) {
-			properties.load(new FileInputStream(propFile));
-			bot = TelegramBotAdapter.build(properties.getProperty("token"));
-			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
-			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
-			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
-			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
-		} else {
-			throw new FileNotFoundException("The properties file is not found");
-		}
+		this.propFilePath = propFilePath;
+		configure();
 	}
 
 	private void fetchUpdates() {
@@ -112,5 +99,32 @@ public class BotServer implements Server {
 	public void refresh() {
 		isStarted = false;
 		start();
+	}
+
+	@Override
+	public void configure() throws IOException {
+		File propFile = new File(propFilePath);
+
+		/*
+		 * Reading properties
+		 */
+		if (propFile.exists()) {
+			properties.load(new FileInputStream(propFile));
+			bot = TelegramBotAdapter.build(properties.getProperty("token"));
+			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
+			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
+			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
+			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
+		} else {
+			throw new FileNotFoundException("The properties file is not found");
+		}
+	}
+
+	public String getPropFilePath() {
+		return propFilePath;
+	}
+
+	public void setPropFilePath(String propFilePath) {
+		this.propFilePath = propFilePath;
 	}
 }

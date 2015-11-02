@@ -1,11 +1,11 @@
-package com.github.pixelase.bot.modules.weather;
+package com.github.pixelase.bot.modules.test;
 
 import com.github.pixelase.bot.api.UserTask;
 import com.pengrad.telegrambot.model.User;
 
-public class WeatherUserTask extends UserTask {
+public class TestUserTask extends UserTask {
 
-	public WeatherUserTask(User user) {
+	public TestUserTask(User user) {
 		super(user);
 	}
 
