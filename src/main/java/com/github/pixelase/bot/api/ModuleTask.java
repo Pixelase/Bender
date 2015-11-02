@@ -14,19 +14,18 @@ public abstract class ModuleTask extends Task implements Configurable {
 	protected ExecutorService userTaskExecutor;
 	protected static long moduleTaskDelay;
 	protected Class<? extends UserTask> userTaskClass;
-	private String propFilePath;
 
-	public ModuleTask(Class<? extends UserTask> userTaskClass) throws IOException {
-		this(new ArrayList<UserTask>(), Executors.newCachedThreadPool(), userTaskClass);
+	public ModuleTask(Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
+		this(new ArrayList<UserTask>(), Executors.newCachedThreadPool(), userTaskClass, propFilePath);
 	}
 
 	private ModuleTask(List<UserTask> userTasks, ExecutorService userTaskExecutor,
-			Class<? extends UserTask> userTaskClass) throws IOException {
+			Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
 		super();
 		this.userTasks = userTasks;
 		this.userTaskExecutor = userTaskExecutor;
 		this.userTaskClass = userTaskClass;
-		configure();
+		configure(propFilePath);
 	}
 
 	public static long getModuleTaskDelay() {
@@ -102,13 +101,5 @@ public abstract class ModuleTask extends Task implements Configurable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public String getPropFilePath() {
-		return propFilePath;
-	}
-
-	public void setPropFilePath(String propFilePath) {
-		this.propFilePath = propFilePath;
 	}
 }

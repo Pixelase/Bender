@@ -10,13 +10,16 @@ public class TestModuleTask extends ModuleTask {
 	/*
 	 * You must implements this constructor
 	 */
-	public TestModuleTask(Class<? extends UserTask> userTaskClass) throws IOException {
-		super(userTaskClass);
+	public TestModuleTask(Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
+		super(userTaskClass, propFilePath);
 	}
 
+	/*
+	 * You must override this method
+	 */
 	@Override
-	public void configure() throws IOException {
+	public void configure(String propFilePath) throws IOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

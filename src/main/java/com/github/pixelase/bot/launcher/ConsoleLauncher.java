@@ -9,9 +9,10 @@ import com.github.pixelase.bot.modules.test.TestModuleTask;
 import com.github.pixelase.bot.modules.test.TestUserTask;
 
 public class ConsoleLauncher {
-	public static void main(String[] args) throws IOException {
-		ModuleTask weatherModule = new TestModuleTask(TestUserTask.class);
-		Server server = new BotServer(".\\src\\main\\resources\\local.properties", weatherModule);
+	public static void main(String[] args) throws IOException, InterruptedException {
+		ModuleTask weatherModule = new TestModuleTask(TestUserTask.class,
+				".\\src\\main\\resources\\test_module.properties");
+		Server server = new BotServer(".\\src\\main\\resources\\server.properties", weatherModule);
 		server.start();
 	}
 }

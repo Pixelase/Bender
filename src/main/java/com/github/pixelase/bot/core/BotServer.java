@@ -1,5 +1,6 @@
 package com.github.pixelase.bot.core;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +24,7 @@ public class BotServer implements Server {
 	private ExecutorService moduleExecutor;
 	private boolean isStarted;
 	private ModuleTask[] modules;
-	private String propFilePath;
+	private static long updatesFetchDelay;
 
 	private BotServer() {
 		properties = new Properties();
@@ -34,26 +35,63 @@ public class BotServer implements Server {
 	public BotServer(String propFilePath, ModuleTask... modules) throws IOException {
 		this();
 		this.modules = modules;
-		this.propFilePath = propFilePath;
-		configure();
+		configure(propFilePath);
 	}
 
-	private void fetchUpdates() {
-		int offset = 0;
-		int limit = 100;
-		GetUpdatesResponse getUpdatesResponse = bot.getUpdates(offset, limit, 0);
-		Update currentUpdate = getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1);
+	@Override
+	public void configure(String propFilePath) throws IOException {
+		File propFile = new File(propFilePath);
 
-		while (getUpdatesResponse.isOk()) {
-			offset = (getUpdatesResponse.updates().size() == limit) ? currentUpdate.updateId() : 0;
+		/*
+		 * Reading properties
+		 */
+		if (propFile.exists()) {
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(propFile));
+			properties.load(bis);
+			bot = TelegramBotAdapter.build(properties.getProperty("token"));
+			BotServer.setUpdatesFetchDelay(Long.parseLong(properties.getProperty("updatesFetchDelay")));
+			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
+			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
+			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
+			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
+			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
+			bis.close();
+		} else {
+			throw new FileNotFoundException("The properties file is not found");
+		}
+	}
+
+	private void fetchUpdates() throws InterruptedException {
+		int offset = 0;
+		final int limit = 1;
+		GetUpdatesResponse getUpdatesResponse = null;
+		Update currentUpdate = null;
+
+		do {
+			/*
+			 * Some delay in fetching updates
+			 */
+			Thread.sleep(updatesFetchDelay);
+
+			/*
+			 * Receiving the latest updates and mark all previous updates as
+			 * handled.
+			 */
 			getUpdatesResponse = bot.getUpdates(offset, limit, 0);
 
-			if (currentUpdate.updateId()
-					.equals(getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1).updateId())) {
+			/*
+			 * Skip iteration if we don't have updates
+			 */
+			if (getUpdatesResponse.updates().isEmpty()) {
 				continue;
 			}
 
-			currentUpdate = getUpdatesResponse.updates().get(getUpdatesResponse.updates().size() - 1);
+			/*
+			 * Get unique update and it's offset that used to mark all previous
+			 * updates as handled.
+			 */
+			currentUpdate = getUpdatesResponse.updates().get(limit - 1);
+			offset = (getUpdatesResponse.updates().size() == limit) ? currentUpdate.updateId() + 1 : 0;
 
 			/*
 			 * Update message for each module
@@ -68,11 +106,11 @@ public class BotServer implements Server {
 			 */
 			System.out
 					.println("Message from " + this.getClass().getSimpleName() + " " + currentUpdate.message().text());
-		}
+		} while (getUpdatesResponse.isOk());
 	}
 
 	@Override
-	public void start() {
+	public void start() throws InterruptedException {
 		if (isStarted) {
 			System.out.println("The server is already started");
 		}
@@ -92,39 +130,21 @@ public class BotServer implements Server {
 			System.out.println("The server hasn't been started");
 		}
 		moduleExecutor.shutdown();
+		;
 		isStarted = false;
 	}
 
 	@Override
-	public void refresh() {
+	public void refresh() throws InterruptedException {
 		isStarted = false;
 		start();
 	}
 
-	@Override
-	public void configure() throws IOException {
-		File propFile = new File(propFilePath);
-
-		/*
-		 * Reading properties
-		 */
-		if (propFile.exists()) {
-			properties.load(new FileInputStream(propFile));
-			bot = TelegramBotAdapter.build(properties.getProperty("token"));
-			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
-			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
-			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
-			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
-		} else {
-			throw new FileNotFoundException("The properties file is not found");
-		}
+	public static long getUpdatesFetchDelay() {
+		return updatesFetchDelay;
 	}
 
-	public String getPropFilePath() {
-		return propFilePath;
-	}
-
-	public void setPropFilePath(String propFilePath) {
-		this.propFilePath = propFilePath;
+	public static void setUpdatesFetchDelay(long updatesFetchDelay) {
+		BotServer.updatesFetchDelay = updatesFetchDelay;
 	}
 }
