@@ -1,4 +1,4 @@
-package Emoji;
+package com.github.pixelase.bot.utils.emoji;
 /**
  * @author Ruben Bermudez
  * @version 1.0
