@@ -12,10 +12,12 @@ public class TestUserTask extends UserTask {
 	@Override
 	public void run() {
 		/*
-		 * TODO UserTask.getDelay() should be used here. Exactly not here, but in
-		 * the abstract class UserTask;
+		 * Example of UserTask implementation
 		 */
-		System.out.printf("From %s task(%s): %s\n", user.username(), this.hashCode(), message.text());
+		while (userTaskTimeout != 0) {
+			sleep(userTaskDelay);
+			System.out.printf("From %s task(%s): %s\n", user.username(), this.hashCode(), message.text());
+		}
 	}
 
 }

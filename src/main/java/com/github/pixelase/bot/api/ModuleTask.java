@@ -59,6 +59,14 @@ public abstract class ModuleTask extends Task implements Configurable {
 			}
 
 			/*
+			 * Update state for each UserTask
+			 */
+			for (UserTask userTask : userTasks) {
+				userTask.setMessage(message);
+				userTask.setOk(isOk);
+			}
+
+			/*
 			 * Create currentUserTask with some user from message;
 			 */
 			currentUserTask = userTaskClass.getConstructor(User.class).newInstance(message.from());
@@ -75,15 +83,9 @@ public abstract class ModuleTask extends Task implements Configurable {
 			 * Add task for a given user into our TaskList TODO we can use stack
 			 * for this may be
 			 */
+			currentUserTask.setMessage(message);
+			currentUserTask.setOk(isOk);
 			userTasks.add(currentUserTask);
-
-			/*
-			 * Update message field for all task's
-			 */
-			for (UserTask userTask : userTasks) {
-				userTask.setMessage(message);
-				userTask.setOk(isOk);
-			}
 
 			/*
 			 * Add task to the executor
