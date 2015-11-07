@@ -1,16 +1,16 @@
-package com.github.pixelase.bot.modules.test;
+package com.github.pixelase.bot.modules.example;
 
 import java.io.IOException;
 
 import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.UserTask;
 
-public class TestModuleTask extends ModuleTask {
+public class ExampleModuleTask extends ModuleTask {
 
 	/*
 	 * You must implements this constructor
 	 */
-	public TestModuleTask(Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
+	public ExampleModuleTask(Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
 		super(userTaskClass, propFilePath);
 	}
 

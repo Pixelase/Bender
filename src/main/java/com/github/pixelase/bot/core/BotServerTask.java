@@ -13,26 +13,24 @@ import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.Server;
 import com.github.pixelase.bot.api.Task;
 import com.github.pixelase.bot.api.UserTask;
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 
-public class BotServer implements Server {
-	private TelegramBot bot;
+public class BotServerTask extends Task implements Server {
 	private Properties properties;
 	private ExecutorService moduleExecutor;
 	private boolean isStarted;
 	private ModuleTask[] modules;
 	private static long updatesFetchDelay;
 
-	private BotServer() {
+	private BotServerTask() {
 		properties = new Properties();
 		moduleExecutor = Executors.newCachedThreadPool();
 		isStarted = false;
 	}
 
-	public BotServer(String propFilePath, ModuleTask... modules) throws IOException {
+	public BotServerTask(String propFilePath, ModuleTask... modules) throws IOException {
 		this();
 		this.modules = modules;
 		configure(propFilePath);
@@ -49,7 +47,7 @@ public class BotServer implements Server {
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(propFile));
 			properties.load(bis);
 			bot = TelegramBotAdapter.build(properties.getProperty("token"));
-			BotServer.setUpdatesFetchDelay(Long.parseLong(properties.getProperty("updatesFetchDelay")));
+			BotServerTask.setUpdatesFetchDelay(Long.parseLong(properties.getProperty("updatesFetchDelay")));
 			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
 			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
 			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
@@ -94,12 +92,10 @@ public class BotServer implements Server {
 			offset = (getUpdatesResponse.updates().size() == limit) ? currentUpdate.updateId() + 1 : 0;
 
 			/*
-			 * Update message for each module
+			 * Update state for each task
 			 */
-			for (ModuleTask module : modules) {
-				module.setMessage(currentUpdate.message());
-				module.setOk(getUpdatesResponse.isOk());
-			}
+			currentMessage = currentUpdate.message();
+			isOk = getUpdatesResponse.isOk();
 
 			/*
 			 * For debug
@@ -130,7 +126,6 @@ public class BotServer implements Server {
 			System.out.println("The server hasn't been started");
 		}
 		moduleExecutor.shutdown();
-		;
 		isStarted = false;
 	}
 
@@ -145,6 +140,11 @@ public class BotServer implements Server {
 	}
 
 	public static void setUpdatesFetchDelay(long updatesFetchDelay) {
-		BotServer.updatesFetchDelay = updatesFetchDelay;
+		BotServerTask.updatesFetchDelay = updatesFetchDelay;
+	}
+
+	@Override
+	public void run() {
+		// TODO for multithreading
 	}
 }
