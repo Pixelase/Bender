@@ -54,20 +54,22 @@ public abstract class ModuleTask extends Task implements Configurable {
 			 * If message is null we can't get it fields, so skip this
 			 * iteration;
 			 */
-			if (currentMessage == null) {
+			if (commonMessage == null) {
 				continue;
 			}
 
 			/*
 			 * Create currentUserTask with some user from message;
 			 */
-			currentUserTask = userTaskClass.getConstructor(User.class).newInstance(currentMessage.from());
+			currentUserTask = userTaskClass.getConstructor(User.class).newInstance(commonMessage.from());
+			currentUserTask.setCurrentMessage(commonMessage);
 
 			/*
 			 * If the task for a given user is already on our list, skip this
 			 * iteration;
 			 */
 			if (userTasks.contains(currentUserTask)) {
+				userTasks.get(userTasks.indexOf(currentUserTask)).setCurrentMessage(commonMessage);
 				continue;
 			}
 

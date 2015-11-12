@@ -6,12 +6,12 @@ import com.pengrad.telegrambot.model.Message;
 public abstract class Task implements Runnable {
 
 	protected static TelegramBot bot;
-	protected static Message currentMessage;
+	protected static Message commonMessage;
 	protected static boolean isOk;
 	protected static long taskDelay;
 
 	static {
-		currentMessage = null;
+		commonMessage = null;
 		isOk = true;
 	}
 

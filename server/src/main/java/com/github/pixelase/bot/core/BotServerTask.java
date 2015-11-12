@@ -94,7 +94,7 @@ public class BotServerTask extends Task implements Server {
 			/*
 			 * Update state for each task
 			 */
-			currentMessage = currentUpdate.message();
+			commonMessage = currentUpdate.message();
 			isOk = getUpdatesResponse.isOk();
 
 			/*
