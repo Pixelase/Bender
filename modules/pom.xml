@@ -15,6 +15,7 @@
 
 	<modules>
 		<module>example-module</module>
+		<module>modules-dependencies</module>
 	</modules>
 
 	<dependencyManagement>
@@ -31,11 +32,6 @@
 		<dependency>
 			<groupId>com.github.pixelase</groupId>
 			<artifactId>server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.github.pixelase</groupId>
-			<artifactId>example-module</artifactId>
-			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 </project>
