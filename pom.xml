@@ -3,18 +3,22 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pixelase</groupId>
 	<artifactId>UniversalTelegramBot</artifactId>
-	<version>0.0.2</version>
+
+	<version>${projectVersion}</version>
 
 
 	<name>UniversalTelegramBot</name>
 	<description>Codename: "SnatchBot"</description>
 	<url>https://github.com/Pixelase/UniversalTelegramBot</url>
 
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<properties>
+		<projectVersion>0.0.3</projectVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 
 	<licenses>
@@ -38,4 +42,10 @@
 			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
+
+	<modules>
+		<module>server</module>
+		<module>launcher</module>
+		<module>modules</module>
+	</modules>
 </project>
