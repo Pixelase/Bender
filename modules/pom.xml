@@ -16,6 +16,7 @@
 	<modules>
 		<module>example-module</module>
 		<module>modules-dependencies</module>
+		<module>grsu-schedule-module</module>
 	</modules>
 
 
@@ -30,6 +31,11 @@
 			<dependency>
 				<groupId>com.github.pixelase.bot</groupId>
 				<artifactId>example-module</artifactId>
+				<version>0.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.pixelase.bot</groupId>
+				<artifactId>grsu-schedule-module</artifactId>
 				<version>0.0.1</version>
 			</dependency>
 		</dependencies>
