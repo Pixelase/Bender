@@ -21,7 +21,7 @@ public class ExampleUserTask extends UserTask {
 			sleep(userTaskDelay);
 			Random random = new Random();
 			if (isMessageUpdated()) {
-				bot.sendMessage(currentMessage.chat().id().intValue(),
+				bot.sendMessage(currentMessage.chat().id(),
 						Emoji.values()[random.nextInt(Emoji.values().length - 1)].toString(), null, null, null, null);
 				System.out.printf("From %s task(%s): %s - %s\n", user.username(), this.hashCode(), currentMessage.text(), currentMessage.messageId());
 			}
