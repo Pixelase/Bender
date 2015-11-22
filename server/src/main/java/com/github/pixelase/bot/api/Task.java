@@ -23,9 +23,10 @@ public abstract class Task implements Runnable {
 	public static void setTaskDelay(long taskDelay) {
 		Task.taskDelay = taskDelay;
 	}
-	
+
 	protected boolean isMessageUpdated() {
-		if (tempMessage != null && commonMessage.date().equals(tempMessage.date())) {
+		if (tempMessage != null && commonMessage.date().equals(tempMessage.date())
+				&& commonMessage.messageId().equals(tempMessage.messageId())) {
 			return false;
 		}
 		tempMessage = commonMessage;
