@@ -37,7 +37,7 @@ public class BotServerTask extends Task implements Server {
 
 	@Override
 	public void configure(String propFilePath) throws IOException {
-		InputStream is = getClass().getResourceAsStream("/" + propFilePath);
+		InputStream is = getClass().getResourceAsStream("/resources/" + propFilePath);
 
 		/*
 		 * Reading properties
