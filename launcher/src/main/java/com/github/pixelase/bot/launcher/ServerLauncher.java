@@ -10,9 +10,8 @@ import com.github.pixelase.bot.modules.example.ExampleUserTask;
 
 public class ServerLauncher {
 	public static void main(String[] args) throws IOException, InterruptedException {
-		ModuleTask moduleTask = new ExampleModuleTask(ExampleUserTask.class,
-				".\\src\\main\\resources\\test_module.properties");
-		Server server = new BotServerTask(".\\src\\main\\resources\\server.properties", moduleTask);
+		ModuleTask moduleTask = new ExampleModuleTask(ExampleUserTask.class, "test_module.properties");
+		Server server = new BotServerTask("server.properties", moduleTask);
 		server.start();
 	}
 }

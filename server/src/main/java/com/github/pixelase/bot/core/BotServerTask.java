@@ -1,10 +1,9 @@
 package com.github.pixelase.bot.core;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,13 +37,13 @@ public class BotServerTask extends Task implements Server {
 
 	@Override
 	public void configure(String propFilePath) throws IOException {
-		File propFile = new File(propFilePath);
+		InputStream is = getClass().getResourceAsStream("/" + propFilePath);
 
 		/*
 		 * Reading properties
 		 */
-		if (propFile.exists()) {
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(propFile));
+		if (is != null) {
+			BufferedInputStream bis = new BufferedInputStream(is);
 			properties.load(bis);
 			bot = TelegramBotAdapter.build(properties.getProperty("token"));
 			BotServerTask.setUpdatesFetchDelay(Long.parseLong(properties.getProperty("updatesFetchDelay")));

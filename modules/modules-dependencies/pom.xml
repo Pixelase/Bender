@@ -18,4 +18,5 @@
 			<artifactId>example-module</artifactId>
 		</dependency>
 	</dependencies>
+	<packaging>pom</packaging>
 </project>
