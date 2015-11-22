@@ -7,12 +7,40 @@ public abstract class UserTask extends Task {
 
 	protected final User user;
 	protected Message currentMessage;
+
 	protected static long userTaskDelay;
-	protected static long userTaskTimeout;
+	private static long userTaskTimeout;
+	private boolean isRunning;
+	private Thread stopWathThread;
 
 	public UserTask(User user) {
 		super();
 		this.user = user;
+		isRunning = true;
+
+		stopWathThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				long startTime = System.currentTimeMillis();
+				long difference = 0;
+				long checkDelay = 60000;// Check very minute
+
+				while (difference / userTaskTimeout != 1) {
+					sleep(checkDelay);
+					difference = System.currentTimeMillis() - startTime;
+				}
+				isRunning = false;
+			}
+		});
+	}
+
+	protected boolean isRunning() {
+		if (!stopWathThread.isAlive()) {
+			stopWathThread.setDaemon(true);
+			stopWathThread.start();
+		}
+
+		return isRunning;
 	}
 
 	public User getUser() {
@@ -41,6 +69,10 @@ public abstract class UserTask extends Task {
 
 	public static void setUserTaskTimeout(long userTaskTimeout) {
 		UserTask.userTaskTimeout = userTaskTimeout;
+	}
+
+	public void InteruptStopWathThread() {
+		stopWathThread.interrupt();
 	}
 
 	public static long getUserTaskDelay() {

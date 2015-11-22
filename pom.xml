@@ -35,21 +35,15 @@
 		<url>git@github.com:Pixelase/UniversalTelegramBot</url>
 	</scm>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.github.pengrad</groupId>
-			<artifactId>java-telegram-bot-api</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-	</dependencies>
-
 	<modules>
 		<module>server</module>
 		<module>launcher</module>
 		<module>modules</module>
 	</modules>
+
 	<dependencyManagement>
 		<dependencies>
+			<!-- Modules -->
 			<dependency>
 				<groupId>com.github.pixelase.bot</groupId>
 				<artifactId>modules</artifactId>
@@ -71,6 +65,20 @@
 				<artifactId>server</artifactId>
 				<version>${projectVersion}</version>
 			</dependency>
+			
+			<!-- Other libs -->
+			<dependency>
+				<groupId>com.github.pengrad</groupId>
+				<artifactId>java-telegram-bot-api</artifactId>
+				<version>1.2.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.pengrad</groupId>
+			<artifactId>java-telegram-bot-api</artifactId>
+		</dependency>
+	</dependencies>
 </project>

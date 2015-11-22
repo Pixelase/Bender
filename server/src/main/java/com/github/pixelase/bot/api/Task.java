@@ -9,6 +9,7 @@ public abstract class Task implements Runnable {
 	protected static Message commonMessage;
 	protected static boolean isOk;
 	protected static long taskDelay;
+	private Message tempMessage;
 
 	static {
 		commonMessage = null;
@@ -21,6 +22,14 @@ public abstract class Task implements Runnable {
 
 	public static void setTaskDelay(long taskDelay) {
 		Task.taskDelay = taskDelay;
+	}
+	
+	protected boolean isMessageUpdated() {
+		if (tempMessage != null && commonMessage.date().equals(tempMessage.date())) {
+			return false;
+		}
+		tempMessage = commonMessage;
+		return true;
 	}
 
 	protected void sleep(long millis) {
