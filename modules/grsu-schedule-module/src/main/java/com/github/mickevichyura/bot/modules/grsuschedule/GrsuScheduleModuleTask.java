@@ -1,4 +1,4 @@
-package com.github.pixelase.bot.modules.grsuschedule;
+package com.github.mickevichyura.bot.modules.grsuschedule;
 
 import java.io.IOException;
 
