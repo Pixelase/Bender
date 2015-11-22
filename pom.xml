@@ -52,11 +52,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.github.pixelase.bot</groupId>
-				<artifactId>modules-dependencies</artifactId>
-				<version>${projectVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.pixelase.bot</groupId>
 				<artifactId>launcher</artifactId>
 				<version>${projectVersion}</version>
 			</dependency>
@@ -65,7 +60,13 @@
 				<artifactId>server</artifactId>
 				<version>${projectVersion}</version>
 			</dependency>
-			
+			<dependency>
+				<groupId>com.github.pixelase.bot</groupId>
+				<artifactId>modules-dependencies</artifactId>
+				<version>${projectVersion}</version>
+				<type>pom</type>
+			</dependency>
+
 			<!-- Other libs -->
 			<dependency>
 				<groupId>com.github.pengrad</groupId>
