@@ -22,6 +22,6 @@ public class Api {
 
 	public static final String GROUP_SCHEDULE = BASE_URL + "getGroupSchedule?groupId=945&subgroupId=3690&dateStart=";
 	
-	public static final String COURSE_LIST = "https://gist.githubusercontent.com/MickevichYura/33b0f33a499c4ae8f295/raw/0f49dfd08daf665d3d56a621bc061173bcf74c0b/course.json";
+	public static final String COURSE_LIST = "https://gist.githubusercontent.com/MickevichYura/33b0f33a499c4ae8f295/raw/24766a76d9a9be7b15c305db1b1a857f43f63282/course.json";
 
 }

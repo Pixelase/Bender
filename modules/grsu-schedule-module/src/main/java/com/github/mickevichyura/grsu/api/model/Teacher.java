@@ -1,6 +1,6 @@
 package com.github.mickevichyura.grsu.api.model;
 
-public class Teacher {
+public class Teacher implements Comparable<Teacher> {
 
 	private String id;
 	private String fullname;
@@ -19,12 +19,13 @@ public class Teacher {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(fullname);
-		
-		
-		return sb.toString();
+	public String toString() {		
+		return fullname;
+	}
+
+	@Override
+	public int compareTo(Teacher o) {
+		return fullname.compareTo(o.getFullname());
 	}
 
 }

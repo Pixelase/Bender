@@ -80,7 +80,7 @@ public class Lesson {
 		StringBuilder sb = new StringBuilder();
 		sb.append(timeStart + " - " + timeEnd + ": ").append("\n");
 		sb.append(title);
-		sb.append(", ").append(type);
+		sb.append(" ").append(type);
 		sb.append("\n").append(address);
 		sb.append(" -- ").append(room);
 		sb.append("\n").append(teacher);
