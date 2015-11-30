@@ -6,6 +6,18 @@ package com.github.pixelase.bot.utils.emoji;
  * @date 02 of July of 2015
  */
 public enum Emoji {
+	//Digits
+    KEYCAP0('\u0030', '\u20e3'),
+    KEYCAP1('\u0031', '\u20e3'),
+    KEYCAP2('\u0032', '\u20e3'),
+    KEYCAP3('\u0033', '\u20e3'),
+    KEYCAP4('\u0034', '\u20e3'),
+    KEYCAP5('\u0035', '\u20e3'),
+    KEYCAP6('\u0036', '\u20e3'),
+    KEYCAP7('\u0037', '\u20e3'),
+    KEYCAP8('\u0038', '\u20e3'),
+	KEYCAP9('\u0039', '\u20e3'),
+	
     // Emoticones group
     GRINNING_FACE_WITH_SMILING_EYES('\uD83D', '\uDE01'),
     FACE_WITH_TEARS_OF_JOY('\uD83D', '\uDE02'),
