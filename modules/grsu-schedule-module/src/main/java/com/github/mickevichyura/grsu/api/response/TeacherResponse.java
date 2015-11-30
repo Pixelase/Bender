@@ -15,10 +15,9 @@ public class TeacherResponse {
 	@Expose
 	private List<Teacher> teachersList;
 	
-	private final int maxSize = 300;
+	private final int maxSize = 30;
 
 	public List<Teacher> getItems() {
-		
 		return teachersList;
 	}
 

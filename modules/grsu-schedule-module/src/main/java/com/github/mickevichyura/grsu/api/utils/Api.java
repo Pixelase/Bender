@@ -17,10 +17,16 @@ public class Api {
 	}
 	
 	public static final String groupSchedule(String groupId) {
-		return BASE_URL + "getGroupSchedule?groupId=" + groupId + "&subgroupId=3690&dateStart=";
+		return BASE_URL + "getGroupSchedule?groupId=" + groupId + "&dateStart=";
 	}
 
 	public static final String GROUP_SCHEDULE = BASE_URL + "getGroupSchedule?groupId=945&subgroupId=3690&dateStart=";
+	
+	public static final String teacherSchedule(String teacherId) {
+		return BASE_URL + "getTeacherSchedule?teacherId=" + teacherId + "&dateStart=";
+	}
+	
+	public static final String TEACHER_SCHEDULE = BASE_URL + "getTeacherSchedule?teacherId=";
 	
 	public static final String COURSE_LIST = "https://gist.githubusercontent.com/MickevichYura/33b0f33a499c4ae8f295/raw/24766a76d9a9be7b15c305db1b1a857f43f63282/course.json";
 

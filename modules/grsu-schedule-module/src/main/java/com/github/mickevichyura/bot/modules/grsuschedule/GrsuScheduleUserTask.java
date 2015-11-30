@@ -2,11 +2,9 @@ package com.github.mickevichyura.bot.modules.grsuschedule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.github.mickevichyura.grsu.api.response.BaseResponse;
@@ -15,6 +13,7 @@ import com.github.mickevichyura.grsu.api.response.GetModels;
 import com.github.mickevichyura.grsu.api.response.TeacherResponse;
 import com.github.mickevichyura.grsu.api.utils.Api;
 import com.github.pixelase.bot.api.UserTask;
+import com.github.pixelase.bot.utils.emoji.Emoji;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ForceReply;
@@ -26,6 +25,8 @@ public class GrsuScheduleUserTask extends UserTask {
 
 	private boolean isConfig;
 	private List<String> settings; // department, faculty, course, group
+
+	String[][] persons;
 
 	private boolean isTeacherConfig;
 	private String teacherId;
@@ -40,6 +41,8 @@ public class GrsuScheduleUserTask extends UserTask {
 	public GrsuScheduleUserTask(User user) {
 		super(user);
 		settings = new ArrayList<String>();
+		persons = new String[1][2];
+		persons[0] = new String[] { "Студент", "Преподаватель" };
 	}
 
 	@Override
@@ -50,22 +53,21 @@ public class GrsuScheduleUserTask extends UserTask {
 		while (isRunning()) {
 			sleep(userTaskDelay);
 
-			// !currentMessage.equals(temp)
-
 			if (!currentMessage.equals(temp)) {
 				temp = currentMessage;
 
-				if (currentMessage.text().startsWith("/teacher") || !isTeacherConfig) {
-					String name = currentMessage.text();
-					if (currentMessage.text().startsWith("/teacher")) {
-						isTeacherConfig = false;
-						int indexOfSpace = currentMessage.text().indexOf(" ") + 1;
-						name = indexOfSpace != 0 ? currentMessage.text().substring(indexOfSpace) : "";
-					}
-					teacherConfig(name);
-				}
-
-				else if (!isConfig || currentMessage.text().startsWith("/settings")) {
+//				if (currentMessage.text().startsWith("/teacher") || !isTeacherConfig) {
+//					String name = currentMessage.text();
+//					if (currentMessage.text().startsWith("/teacher")) {
+//						isTeacherConfig = false;
+//						int indexOfSpace = currentMessage.text().indexOf(" ") + 1;
+//						name = indexOfSpace != 0 ? currentMessage.text().substring(indexOfSpace) : "";
+//					}
+//					teacherConfig(name);
+//				}
+//
+//				else
+					if (!isConfig || currentMessage.text().startsWith("/settings")) {
 					config();
 				} else {
 					int day = 0;
@@ -110,6 +112,19 @@ public class GrsuScheduleUserTask extends UserTask {
 		}
 
 		bot.sendMessage(currentMessage.chat().id(), sendMessage, ParseMode.Markdown, null, null, rkm);
+		sendTeacherSchedule(0);
+	}
+
+	private void sendTeacherSchedule(int day) {
+		TimeUnit t = TimeUnit.MILLISECONDS;
+		long daySeconds = t.convert(1L, TimeUnit.DAYS);
+
+		Date date = new Date(t.convert(currentMessage.date(), TimeUnit.SECONDS) + daySeconds * day);
+		DayResponse groupSchedule = GetModels.getModels(Api.TEACHER_SCHEDULE + teacherId, DayResponse.class);
+		System.out.println(groupSchedule);
+
+		String markdown = groupSchedule.getDays().get(0).toString();
+		bot.sendMessage(currentMessage.chat().id(), markdown, ParseMode.Markdown, null, null, null);
 
 	}
 
@@ -122,13 +137,19 @@ public class GrsuScheduleUserTask extends UserTask {
 
 		}
 		if (baseResponse != null) {
-			String id = baseResponse.findId(currentMessage.text());
+			String reply = currentMessage.text();
+			if(settings.size() == 2){
+				reply = currentMessage.text().replace(Emoji.values()[1].getSecondChar().toString(), "");
+				System.out.println(currentMessage.text().indexOf(Emoji.values()[1].toString()));
+			}
+			String id = baseResponse.findId(reply);
 			if (id != null) {
 				settings.add(id);
 			}
 		}
 
 		switch (settings.size()) {
+		
 		case 1:
 			url = Api.FACULTY_LIST;
 			sendMessage = "Выберите факультет";
@@ -151,7 +172,7 @@ public class GrsuScheduleUserTask extends UserTask {
 		default:
 			url = Api.DEPARTMENT_LIST;
 			System.out.println(settings.size() + "start");
-			sendMessage = "Выберите форму обучения";
+			sendMessage = "Выберите форму обучения";	
 			break;
 		}
 
@@ -160,7 +181,24 @@ public class GrsuScheduleUserTask extends UserTask {
 		if (!isConfig) {
 			baseResponse = GetModels.getModels(url);
 			String[][] array = baseResponse.itemsToStringArray(2);
+			
 			rkm = new ReplyKeyboardMarkup(array, true, false, false);
+			
+			if(settings.size() == 2){
+				String keycap = "KEYCAP";
+				for (int i = 0; i < array.length; i++) {
+					for (int j = 0; j < array[i].length; j++) {
+						String emoji = "";
+						try{
+							emoji = Emoji.valueOf(keycap + Integer.parseInt(array[i][j].substring(0, 1))).toString();
+						}
+						catch(Exception e){
+							emoji = "";
+						}
+						array[i][j] =  array[i][j].replace(array[i][j].substring(0, 1), emoji);
+					}
+				}
+			}
 		} else {
 			rkm = new ForceReply();
 			sendMessage = settings.toString();
@@ -179,7 +217,7 @@ public class GrsuScheduleUserTask extends UserTask {
 		Date date = new Date(t.convert(currentMessage.date(), TimeUnit.SECONDS) + daySeconds * day);
 		DayResponse groupSchedule = GetModels.getModels(Api.groupSchedule(settings.get(3)) + DATE_FORMAT.format(date),
 				DayResponse.class);
-		
+
 		String markdown = groupSchedule.getDays().get(0).toString();
 		bot.sendMessage(currentMessage.chat().id(), markdown, ParseMode.Markdown, null, null, null);
 

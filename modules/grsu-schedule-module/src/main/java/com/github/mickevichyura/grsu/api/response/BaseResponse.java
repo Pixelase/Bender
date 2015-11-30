@@ -3,6 +3,7 @@ package com.github.mickevichyura.grsu.api.response;
 import java.util.List;
 
 import com.github.mickevichyura.grsu.api.model.BaseModel;
+import com.github.pixelase.bot.utils.emoji.Emoji;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,7 +29,7 @@ public class BaseResponse {
 			}
 
 			for (int j = 0; j < array[i].length; j++) {
-				array[i][j] = items.get(count++).toString();
+				array[i][j] =  items.get(count++).toString();
 			}
 		}
 		return array;
@@ -41,6 +42,7 @@ public class BaseResponse {
 			if (title.equals(baseModel.getTitle()))
 				indexOf = baseModel;
 		}
+		System.out.println(indexOf);
 		return indexOf == null ? null : indexOf.getId();
 	}
 

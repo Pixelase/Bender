@@ -71,10 +71,6 @@ public class Lesson {
 		return subgroup;
 	}
 
-	public void setSubgroup(Subgroup subgroup) {
-		this.subgroup = subgroup;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -83,13 +79,14 @@ public class Lesson {
 		sb.append(" ").append(type);
 		sb.append("\n").append(address);
 		sb.append(" -- ").append(room);
-		sb.append("\n").append(teacher);
-		sb.append("\n").append(subgroup);
+		if (teacher != null) {
+			sb.append("\n").append(teacher);
+			sb.append("\n").append(subgroup);
 
-		if(!"".equals(subgroup.getTitle())){
-			sb.append("\n");
+			if (!"".equals(subgroup.getTitle())) {
+				sb.append("\n");
+			}
 		}
-		
 		return sb.toString();
 	}
 

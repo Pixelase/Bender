@@ -4,26 +4,8 @@ import java.util.List;
 
 public class Day {
 
-	private String num;
-	private Integer count;
 	private String date;
 	private List<Lesson> lessons;
-
-	public String getNum() {
-		return num;
-	}
-
-	public void setNum(String num) {
-		this.num = num;
-	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
-	}
 
 	public String getDate() {
 		return date;
