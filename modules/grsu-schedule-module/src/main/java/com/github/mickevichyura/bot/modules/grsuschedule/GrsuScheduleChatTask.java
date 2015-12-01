@@ -19,6 +19,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.ForceReply;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardHide;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
 public class GrsuScheduleChatTask extends ChatTask {
@@ -36,8 +37,6 @@ public class GrsuScheduleChatTask extends ChatTask {
 	private BaseResponse baseResponse;
 	private TeacherResponse teacherResponse;
 
-	private Message temp;
-
 	public GrsuScheduleChatTask(Chat chat) {
 		super(chat);
 		settings = new ArrayList<String>();
@@ -53,8 +52,7 @@ public class GrsuScheduleChatTask extends ChatTask {
 		while (isRunning()) {
 			sleep(chatTaskDelay);
 
-			if (!currentMessage.equals(temp)) {
-				temp = currentMessage;
+			if (isMessageUpdated()) {
 
 //				if (currentMessage.text().startsWith("/teacher") || !isTeacherConfig) {
 //					String name = currentMessage.text();
@@ -80,7 +78,7 @@ public class GrsuScheduleChatTask extends ChatTask {
 					sendSchedule(day);
 				}
 
-				System.out.printf("From %s task(%s): %s\n", chat.username(), this.hashCode(), currentMessage.text());
+				System.out.printf("From %s task(%s): %s\n", chat.title(), this.hashCode(), currentMessage.text());
 			}
 		}
 	}
@@ -99,8 +97,8 @@ public class GrsuScheduleChatTask extends ChatTask {
 		if (!isTeacherConfig) {
 			teacherId = teacherResponse.findId(name);
 			if (teacherId != null) {
-				sendMessage = teacherId + " " + name;
 				rkm = new ForceReply();
+				sendMessage = currentMessage.text();
 				isTeacherConfig = true;
 			}
 		}
@@ -171,7 +169,6 @@ public class GrsuScheduleChatTask extends ChatTask {
 
 		default:
 			url = Api.DEPARTMENT_LIST;
-			System.out.println(settings.size() + "start");
 			sendMessage = "Выберите форму обучения";	
 			break;
 		}
@@ -201,7 +198,7 @@ public class GrsuScheduleChatTask extends ChatTask {
 			}
 		} else {
 			rkm = new ForceReply();
-			sendMessage = settings.toString();
+			sendMessage = currentMessage.text();
 		}
 
 		bot.sendMessage(currentMessage.chat().id(), sendMessage, ParseMode.Markdown, null, null, rkm);
