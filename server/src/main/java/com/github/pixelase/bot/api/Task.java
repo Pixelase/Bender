@@ -25,8 +25,7 @@ public abstract class Task implements Runnable {
 	}
 
 	protected boolean isCommonMessageUpdated() {
-		if (tempMessage != null && commonMessage.date().equals(tempMessage.date())
-				&& commonMessage.messageId().equals(tempMessage.messageId())) {
+		if (commonMessage.equals(tempMessage)) {
 			return false;
 		}
 		tempMessage = commonMessage;
