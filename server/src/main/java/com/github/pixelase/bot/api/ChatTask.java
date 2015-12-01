@@ -87,13 +87,12 @@ public abstract class ChatTask extends Task {
 	}
 
 	protected boolean isMessageUpdated() {
-		if (tempMessage != null && currentMessage.date().equals(tempMessage.date())
-				&& currentMessage.messageId().equals(tempMessage.messageId())) {
+		if (currentMessage.equals(tempMessage)) {
 			return false;
 		}
+
 		tempMessage = currentMessage;
 		return true;
-
 	}
 
 	@Override

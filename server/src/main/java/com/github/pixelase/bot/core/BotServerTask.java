@@ -8,31 +8,30 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.github.pixelase.bot.api.ChatTask;
 import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.Server;
 import com.github.pixelase.bot.api.Task;
-import com.github.pixelase.bot.api.ChatTask;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 
 public class BotServerTask extends Task implements Server {
+	private String propFilePath;
 	private Properties properties;
+	private Thread serverThread;
 	private ExecutorService moduleExecutor;
-	private boolean isStarted;
 	private ModuleTask[] modules;
 	private static long updatesFetchDelay;
 
 	private BotServerTask() {
 		properties = new Properties();
-		moduleExecutor = Executors.newCachedThreadPool();
-		isStarted = false;
 	}
 
-	public BotServerTask(String propFilePath, ModuleTask... modules) throws IOException {
+	public BotServerTask(String propFilePath, ModuleTask... modules) {
 		this();
+		this.propFilePath = propFilePath;
 		this.modules = modules;
-		configure(propFilePath);
 	}
 
 	@Override
@@ -58,7 +57,7 @@ public class BotServerTask extends Task implements Server {
 		}
 	}
 
-	private void fetchUpdates() throws InterruptedException {
+	private void fetchUpdates() {
 		int offset = 0;
 		final int limit = 1;
 		GetUpdatesResponse getUpdatesResponse = null;
@@ -68,7 +67,7 @@ public class BotServerTask extends Task implements Server {
 			/*
 			 * Some delay in fetching updates
 			 */
-			Thread.sleep(updatesFetchDelay);
+			sleep(updatesFetchDelay);
 
 			/*
 			 * Receiving the latest updates and mark all previous updates as
@@ -104,34 +103,44 @@ public class BotServerTask extends Task implements Server {
 		} while (getUpdatesResponse.isOk());
 	}
 
-	@Override
-	public void start() throws InterruptedException {
-		if (isStarted) {
-			System.out.println("The server is already started");
-		}
+	private void startExecution() throws IOException {
+		configure(propFilePath);
+		moduleExecutor = Executors.newCachedThreadPool();
+		serverThread = new Thread(this, "Server-thread");
+		serverThread.start();
+	}
 
-		if (modules.length != 0) {
-			for (ModuleTask module : modules) {
-				moduleExecutor.submit(module);
-			}
+	@SuppressWarnings("deprecation")
+	private void stopExecution() {
+		serverThread.stop();
+	}
+
+	@Override
+	public void start() throws IOException {
+		if (serverThread != null && serverThread.isAlive()) {
+			System.out.println("The server is already started");
+			return;
 		}
-		isStarted = true;
-		fetchUpdates();
+		startExecution();
 	}
 
 	@Override
 	public void stop() {
-		if (!isStarted) {
+		if (serverThread == null || !serverThread.isAlive()) {
 			System.out.println("The server hasn't been started");
+			return;
 		}
-		moduleExecutor.shutdown();
-		isStarted = false;
+		stopExecution();
 	}
 
 	@Override
-	public void refresh() throws InterruptedException {
-		isStarted = false;
-		start();
+	public void restart() throws IOException {
+		if (serverThread == null || !serverThread.isAlive()) {
+			System.out.println("The server hasn't been started");
+			return;
+		}
+		stopExecution();
+		startExecution();
 	}
 
 	public static long getUpdatesFetchDelay() {
@@ -144,6 +153,9 @@ public class BotServerTask extends Task implements Server {
 
 	@Override
 	public void run() {
-		// TODO for multithreading
+		for (ModuleTask module : modules) {
+			moduleExecutor.submit(module);
+		}
+		fetchUpdates();
 	}
 }
