@@ -12,16 +12,16 @@ import com.github.mickevichyura.grsu.api.response.DayResponse;
 import com.github.mickevichyura.grsu.api.response.GetModels;
 import com.github.mickevichyura.grsu.api.response.TeacherResponse;
 import com.github.mickevichyura.grsu.api.utils.Api;
-import com.github.pixelase.bot.api.UserTask;
+import com.github.pixelase.bot.api.ChatTask;
 import com.github.pixelase.bot.utils.emoji.Emoji;
+import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ForceReply;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
-public class GrsuScheduleUserTask extends UserTask {
+public class GrsuScheduleChatTask extends ChatTask {
 
 	private boolean isConfig;
 	private List<String> settings; // department, faculty, course, group
@@ -38,8 +38,8 @@ public class GrsuScheduleUserTask extends UserTask {
 
 	private Message temp;
 
-	public GrsuScheduleUserTask(User user) {
-		super(user);
+	public GrsuScheduleChatTask(Chat chat) {
+		super(chat);
 		settings = new ArrayList<String>();
 		persons = new String[1][2];
 		persons[0] = new String[] { "Студент", "Преподаватель" };
@@ -51,7 +51,7 @@ public class GrsuScheduleUserTask extends UserTask {
 		 * Example of UserTask implementation
 		 */
 		while (isRunning()) {
-			sleep(userTaskDelay);
+			sleep(chatTaskDelay);
 
 			if (!currentMessage.equals(temp)) {
 				temp = currentMessage;
@@ -80,7 +80,7 @@ public class GrsuScheduleUserTask extends UserTask {
 					sendSchedule(day);
 				}
 
-				System.out.printf("From %s task(%s): %s\n", user.username(), this.hashCode(), currentMessage.text());
+				System.out.printf("From %s task(%s): %s\n", chat.username(), this.hashCode(), currentMessage.text());
 			}
 		}
 	}

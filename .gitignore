@@ -7,7 +7,6 @@ tmp/
 *.bak
 *.swp
 *~.nib
-*.properties
 .settings/
 .loadpath
 
@@ -50,3 +49,6 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+# My gitignore
+token.txt
