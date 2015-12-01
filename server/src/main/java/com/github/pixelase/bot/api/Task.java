@@ -24,7 +24,7 @@ public abstract class Task implements Runnable {
 		Task.taskDelay = taskDelay;
 	}
 
-	protected boolean isMessageUpdated() {
+	protected boolean isCommonMessageUpdated() {
 		if (tempMessage != null && commonMessage.date().equals(tempMessage.date())
 				&& commonMessage.messageId().equals(tempMessage.messageId())) {
 			return false;

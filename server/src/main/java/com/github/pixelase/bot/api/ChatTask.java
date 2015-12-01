@@ -1,21 +1,24 @@
 package com.github.pixelase.bot.api;
 
+import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.User;
 
-public abstract class UserTask extends Task {
+public abstract class ChatTask extends Task {
 
-	protected final User user;
+	protected final Chat chat;
 	protected Message currentMessage;
 
-	protected static long userTaskDelay;
-	private static long userTaskTimeout;
+	protected static long chatTaskDelay;
+	private static long chatTaskTimeout;
 	private boolean isRunning;
 	private Thread stopWathThread;
+	private Long id;
+	private Message tempMessage;
 
-	public UserTask(User user) {
+	public ChatTask(Chat chat) {
 		super();
-		this.user = user;
+		this.chat = chat;
+		this.id = chat.id();
 		isRunning = true;
 
 		stopWathThread = new Thread(new Runnable() {
@@ -25,7 +28,7 @@ public abstract class UserTask extends Task {
 				long difference = 0;
 				long checkDelay = 60000;// Check very minute
 
-				while (difference / userTaskTimeout != 1) {
+				while (difference / chatTaskTimeout != 1) {
 					sleep(checkDelay);
 					difference = System.currentTimeMillis() - startTime;
 				}
@@ -43,8 +46,8 @@ public abstract class UserTask extends Task {
 		return isRunning;
 	}
 
-	public User getUser() {
-		return user;
+	public Chat getChat() {
+		return chat;
 	}
 
 	public Message getCurrentMessage() {
@@ -56,38 +59,48 @@ public abstract class UserTask extends Task {
 	}
 
 	public static long getTaskTimeout() {
-		return userTaskTimeout;
+		return chatTaskTimeout;
 	}
 
 	public static void setTaskTimeout(long taskTimeout) {
-		UserTask.userTaskTimeout = taskTimeout;
+		ChatTask.chatTaskTimeout = taskTimeout;
 	}
 
-	public static long getUserTaskTimeout() {
-		return userTaskTimeout;
+	public static long getChatTaskTimeout() {
+		return chatTaskTimeout;
 	}
 
-	public static void setUserTaskTimeout(long userTaskTimeout) {
-		UserTask.userTaskTimeout = userTaskTimeout;
+	public static void setChatTaskTimeout(long chatTaskTimeout) {
+		ChatTask.chatTaskTimeout = chatTaskTimeout;
 	}
 
 	public void InteruptStopWathThread() {
 		stopWathThread.interrupt();
 	}
 
-	public static long getUserTaskDelay() {
-		return userTaskDelay;
+	public static long getChatTaskDelay() {
+		return chatTaskDelay;
 	}
 
-	public static void setUserTaskDelay(long userTaskDelay) {
-		UserTask.userTaskDelay = userTaskDelay;
+	public static void setChatTaskDelay(long chatTaskDelay) {
+		ChatTask.chatTaskDelay = chatTaskDelay;
+	}
+
+	protected boolean isMessageUpdated() {
+		if (tempMessage != null && currentMessage.date().equals(tempMessage.date())
+				&& currentMessage.messageId().equals(tempMessage.messageId())) {
+			return false;
+		}
+		tempMessage = currentMessage;
+		return true;
+
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -97,13 +110,13 @@ public abstract class UserTask extends Task {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof ChatTask))
 			return false;
-		UserTask other = (UserTask) obj;
-		if (user == null) {
-			if (other.user != null)
+		ChatTask other = (ChatTask) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

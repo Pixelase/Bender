@@ -8,25 +8,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.model.Chat;
 
 public abstract class ModuleTask extends Task implements Configurable {
-	private Map<UserTask, Future<? extends UserTask>> userTasks;
-	private ExecutorService userTaskExecutor;
+	private Map<ChatTask, Future<? extends ChatTask>> chatTasks;
+	private ExecutorService chatTasksExecutor;
 	protected static long moduleTaskDelay;
-	private Class<? extends UserTask> userTaskClass;
+	private Class<? extends ChatTask> chatTaskClass;
 
-	public ModuleTask(Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
-		this(new HashMap<UserTask, Future<? extends UserTask>>(), Executors.newCachedThreadPool(), userTaskClass,
+	public ModuleTask(Class<? extends ChatTask> chatTaskClass, String propFilePath) throws IOException {
+		this(new HashMap<ChatTask, Future<? extends ChatTask>>(), Executors.newCachedThreadPool(), chatTaskClass,
 				propFilePath);
 	}
 
-	private ModuleTask(Map<UserTask, Future<? extends UserTask>> userTasksMap, ExecutorService userTaskExecutor,
-			Class<? extends UserTask> userTaskClass, String propFilePath) throws IOException {
+	private ModuleTask(Map<ChatTask, Future<? extends ChatTask>> chatTasksMap, ExecutorService chatTaskExecutor,
+			Class<? extends ChatTask> chatTaskClass, String propFilePath) throws IOException {
 		super();
-		this.userTasks = userTasksMap;
-		this.userTaskExecutor = userTaskExecutor;
-		this.userTaskClass = userTaskClass;
+		this.chatTasks = chatTasksMap;
+		this.chatTasksExecutor = chatTaskExecutor;
+		this.chatTaskClass = chatTaskClass;
 		configure(propFilePath);
 	}
 
@@ -39,13 +39,13 @@ public abstract class ModuleTask extends Task implements Configurable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void startExecution(Class<? extends UserTask> userTaskClass)
+	private void startExecution(Class<? extends ChatTask> chatTaskClass)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 			NoSuchMethodException, SecurityException {
 		/*
 		 * Temp variable
 		 */
-		UserTask currentUserTask = null;
+		ChatTask currentChatTask = null;
 
 		while (isOk) {
 			/*
@@ -57,32 +57,32 @@ public abstract class ModuleTask extends Task implements Configurable {
 			 * If message is null we can't get it fields, so skip this
 			 * iteration;
 			 */
-			if (commonMessage == null || !isMessageUpdated()) {
+			if (commonMessage == null || !isCommonMessageUpdated()) {
 				continue;
 			}
 
 			/*
-			 * Create currentUserTask with some user from message;
+			 * Create currentChatTask with some chat from message;
 			 */
-			currentUserTask = userTaskClass.getConstructor(User.class).newInstance(commonMessage.from());
-			currentUserTask.setCurrentMessage(commonMessage);
+			currentChatTask = chatTaskClass.getConstructor(Chat.class).newInstance(commonMessage.chat());
+			currentChatTask.setCurrentMessage(commonMessage);
 
 			/*
-			 * If the task for a given user is already on our list, skip this
+			 * If the task for a given chat is already on our list, skip this
 			 * iteration;
 			 */
-			if (userTasks.containsKey(currentUserTask)) {
-				for (UserTask task : userTasks.keySet()) {
-					if (task.equals(currentUserTask)) {
+			if (chatTasks.containsKey(currentChatTask)) {
+				for (ChatTask task : chatTasks.keySet()) {
+					if (task.equals(currentChatTask)) {
 						task.setCurrentMessage(commonMessage);
 						break;
 					}
 				}
 
-				Future<? extends UserTask> future = userTasks.get(currentUserTask);
+				Future<? extends ChatTask> future = chatTasks.get(currentChatTask);
 
 				if (future.isDone() || future.isCancelled()) {
-					userTasks.remove(currentUserTask);
+					chatTasks.remove(currentChatTask);
 				} else {
 					continue;
 				}
@@ -91,14 +91,14 @@ public abstract class ModuleTask extends Task implements Configurable {
 			/*
 			 * Add task to the executor and add it to our map
 			 */
-			userTasks.put(currentUserTask, (Future<? extends UserTask>) userTaskExecutor.submit(currentUserTask));
+			chatTasks.put(currentChatTask, (Future<? extends ChatTask>) chatTasksExecutor.submit(currentChatTask));
 		}
 	}
 
 	@Override
 	public void run() {
 		try {
-			startExecution(userTaskClass);
+			startExecution(chatTaskClass);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
