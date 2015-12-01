@@ -1,16 +1,15 @@
 package com.github.pixelase.bot.modules.busschedule;
 
 import java.util.Arrays;
-import java.util.Random;
 
-import com.github.pixelase.bot.api.UserTask;
+import com.github.pixelase.bot.api.ChatTask;
 import com.github.pixelase.bot.utils.emoji.Emoji;
-import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.model.Chat;
 
-public class BusScheduleUserTask extends UserTask {
+public class BusScheduleChatTask extends ChatTask {
 
-	public BusScheduleUserTask(User user) {
-		super(user);
+	public BusScheduleChatTask(Chat chat) {
+		super(chat);
 	}
 
 	@Override
@@ -19,10 +18,10 @@ public class BusScheduleUserTask extends UserTask {
 		 * Example of UserTask implementation
 		 */
 		while (isRunning()) {
-			sleep(userTaskDelay);
+			sleep(chatTaskDelay);
 			if (isMessageUpdated()) {
 				bot.sendMessage(currentMessage.chat().id(), Arrays.toString(Emoji.values()), null, null, null, null);
-				System.out.printf("From %s task(%s): %s - %s\n", user.username(), this.hashCode(), currentMessage.text(), currentMessage.messageId());
+				System.out.printf("From %s task(%s): %s - %s\n", chat.username(), this.hashCode(), currentMessage.text(), currentMessage.messageId());
 			}
 		}
 	}

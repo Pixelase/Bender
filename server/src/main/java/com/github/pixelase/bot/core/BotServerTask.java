@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import com.github.pixelase.bot.api.ModuleTask;
 import com.github.pixelase.bot.api.Server;
 import com.github.pixelase.bot.api.Task;
-import com.github.pixelase.bot.api.UserTask;
+import com.github.pixelase.bot.api.ChatTask;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
@@ -50,8 +50,8 @@ public class BotServerTask extends Task implements Server {
 			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
 			Task.setTaskDelay(Long.parseLong(properties.getProperty("taskDelay")));
 			ModuleTask.setModuleTaskDelay(Long.parseLong(properties.getProperty("moduleTaskDelay")));
-			UserTask.setUserTaskDelay(Long.parseLong(properties.getProperty("userTaskDelay")));
-			UserTask.setUserTaskTimeout(Long.parseLong(properties.getProperty("userTaskTimeout")));
+			ChatTask.setChatTaskDelay(Long.parseLong(properties.getProperty("chatTaskDelay")));
+			ChatTask.setChatTaskTimeout(Long.parseLong(properties.getProperty("chatTaskTimeout")));
 			bis.close();
 		} else {
 			throw new FileNotFoundException("The properties file is not found");
