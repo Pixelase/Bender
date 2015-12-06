@@ -33,7 +33,7 @@ public class TeacherResponse {
 		if(list.size() > maxSize){
 			list = list.subList(0, 0 + maxSize);
 		}
-		System.out.println(list);
+		
 		if(list.size() == 0){
 			list = teachersList;
 		}
