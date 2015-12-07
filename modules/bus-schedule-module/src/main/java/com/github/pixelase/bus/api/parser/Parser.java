@@ -7,48 +7,28 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Parser {
-	
-    protected void parse(String strJson) {
-        
-        // выводим целиком полученную json-строку
-        System.out.println(strJson);
+	public void parse(String strJson) {
+		JsonObject dataJsonObj = null;
+		JsonParser parser = new JsonParser();
+		Object object = parser.parse(strJson);
 
-        JsonObject dataJsonObj = null;
-        JsonElement secondName;
-        
-        JsonParser parser = new JsonParser();
-        
-        Object object = parser.parse(strJson);
-        
+		try {
+			dataJsonObj = (JsonObject) object;
 
-        try {
-            /*dataJsonObj = (JsonObject) object;
-            
-            JsonArray friends = dataJsonObj.getAsJsonArray("friends");
+			JsonArray threads = dataJsonObj.getAsJsonArray("threads");
 
-            // 1. достаем инфо о втором друге - индекс 1
-            JsonObject secondFriend = (JsonObject) friends.get(1);
-            secondName = secondFriend.get("name");
-            System.out.println("Второе имя: " + secondName);
+			for (int i = 0; i < threads.size(); i++) {
+				JsonObject thread = (JsonObject) threads.get(i);
+				JsonObject trip = (JsonObject) thread.get("thread");
 
-            // 2. перебираем и выводим контакты каждого друга
-            for (int i = 0; i < friends.size(); i++) {
-                JsonObject friend = (JsonObject) friends.get(i);
+				JsonElement title = trip.get("title");
+				JsonElement arrival = thread.get("arrival");
 
-                JsonObject contacts = (JsonObject) friend.get("contacts");
-
-                JsonElement phone = contacts.get("mobile");
-                JsonElement email = contacts.get("email");
-                JsonElement skype = contacts.get("skype");
-                
-                System.out.println("phone: " + phone);
-                System.out.println("email: " + email);
-                System.out.println("skype: " + skype);
-            }*/
-
-        } catch (JsonIOException e) {
-            e.printStackTrace();
-        }
-    }
+				System.out.println("title: " + title);
+				System.out.println("arrival: " + arrival);
+			}
+		} catch (JsonIOException e) {
+			e.printStackTrace();
+		}
+	}
 }
-
