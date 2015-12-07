@@ -1,24 +1,80 @@
 package com.github.pixelase.bus.api.parser;
 
+import java.net.MalformedURLException;
+
+import com.github.pixelase.bus.api.utils.HttpUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/*
+ * Parser has method parse, that should be convert needed parts of Json
+ * to my own class Trip with some fields
+ */
+
 public class Parser {
-	public void parse(String strJson) {
-		JsonObject dataJsonObj = null;
-		JsonParser parser = new JsonParser();
-		Object object = parser.parse(strJson);
+	private JsonObject jsonObj;
+	private JsonParser parser;
+	private Object object;
+	private String json;
+	private HttpUtils httpUtils;
+	private JsonArray threads;
 
+	public Parser() throws MalformedURLException {
+		this.httpUtils = new HttpUtils();
+		this.json = this.httpUtils.getJson();
+		this.parser = new JsonParser();
+		this.object = parser.parse(this.json);
+		this.jsonObj = (JsonObject) object;
+		this.threads = jsonObj.getAsJsonArray("threads");
+	}
+
+	public JsonObject getJsonObj() {
+		return jsonObj;
+	}
+
+	public void setJsonObj(JsonObject jsonObj) {
+		this.jsonObj = jsonObj;
+	}
+
+	public JsonParser getParser() {
+		return parser;
+	}
+
+	public void setParser(JsonParser parser) {
+		this.parser = parser;
+	}
+
+	public Object getObject() {
+		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
+	}
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
+
+	public HttpUtils getHttpUtils() {
+		return httpUtils;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
+	}
+
+	public void parse() {
 		try {
-			dataJsonObj = (JsonObject) object;
-
-			JsonArray threads = dataJsonObj.getAsJsonArray("threads");
-
 			for (int i = 0; i < threads.size(); i++) {
-				JsonObject thread = (JsonObject) threads.get(i);
+				JsonObject thread = (JsonObject) this.threads.get(i);
 				JsonObject trip = (JsonObject) thread.get("thread");
 
 				JsonElement title = trip.get("title");
@@ -30,5 +86,11 @@ public class Parser {
 		} catch (JsonIOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Parser [jsonObj=" + jsonObj + ", parser=" + parser + ", object=" + object + ", json=" + json
+				+ ", httpUtils=" + httpUtils + "]";
 	}
 }

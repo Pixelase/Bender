@@ -1,9 +1,17 @@
 package com.github.pixelase.bus.api.model;
 
 public class Trip {
+	private String title;
 	private String arrival;
-	private Point from;
-	private Point to;
+
+	public Trip() {
+
+	}
+
+	public Trip(String title, String arrival) {
+		this.title = title;
+		this.arrival = arrival;
+	}
 
 	public String getArrival() {
 		return arrival;
@@ -13,24 +21,16 @@ public class Trip {
 		this.arrival = arrival;
 	}
 
-	public Point getFrom() {
-		return from;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setFrom(Point from) {
-		this.from = from;
-	}
-
-	public Point getTo() {
-		return to;
-	}
-
-	public void setTo(Point to) {
-		this.to = to;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	@Override
 	public String toString() {
-		return "Trip [arrival=" + arrival + ", from=" + from + ", to=" + to + "]";
+		return "Trip [title=" + title + ", arrival=" + arrival + "]";
 	}
 }
