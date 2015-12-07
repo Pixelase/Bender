@@ -8,6 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/*
+ * HttpUtils get connection with resource by setting api url
+ * So than this city wok return Json 
+ */
+
 public class HttpUtils {
 	private HttpURLConnection httpURLConnection;
 	private BufferedReader bufferedReader;
@@ -15,8 +20,8 @@ public class HttpUtils {
 	private URL url;
 
 	private void urlInit() throws MalformedURLException {
-		this.url = new URL("http://androiddocs.ru/api/friends.json");
-		//this.url = new URL(Api.BASE_URL);
+		//this.url = new URL(Api.EXAMPLE_URL);
+		this.url = new URL(Api.BASE_URL);
 	}
 
 	private void urlConnectionInit() throws IOException {
