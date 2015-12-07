@@ -1,36 +1,59 @@
 package com.github.pixelase.bus.api.utils;
 
-import java.io.Closeable;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HttpUtils {
-	public static final int READ_TIMEOUT_MILLIS = 10000;
-	public static final int CONNECTION_TIMEOUT_MILLIS = 15000;
+	private HttpURLConnection httpURLConnection;
+	private BufferedReader bufferedReader;
+	private String resultJson;
+	private URL url;
 
-	public static InputStream getInputStream(String myUrl) throws IOException {
-		URL url = new URL(myUrl);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		
-		connection.setReadTimeout(READ_TIMEOUT_MILLIS);
-		connection.setConnectTimeout(CONNECTION_TIMEOUT_MILLIS);
-		connection.setRequestMethod("GET");
-		connection.setDoInput(true);
-		// Starts the query
-		connection.connect();
-		
-		return connection.getInputStream();
+	private void urlInit() throws MalformedURLException {
+		this.url = new URL("http://androiddocs.ru/api/friends.json");
+		//this.url = new URL(Api.BASE_URL);
 	}
 
-	public static void close(Closeable closeable) {
+	private void urlConnectionInit() throws IOException {
+		this.httpURLConnection = (HttpURLConnection) url.openConnection();
+		this.httpURLConnection.setRequestMethod("GET");
+		this.httpURLConnection.connect();
+	}
+
+	private void bufferedReaderInit() throws IOException {
+		InputStream inputStream = httpURLConnection.getInputStream();
+		this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+	}
+	
+	public HttpUtils() throws MalformedURLException {
 		try {
-			if (closeable != null) {
-				closeable.close();
-			}
+			urlInit();
+			urlConnectionInit();
+			bufferedReaderInit();
+			this.resultJson = "";
 		} catch (IOException e) {
-			System.out.println("IOException: " + e.toString());
+			e.printStackTrace();
 		}
+	}
+
+	public String getJson() {
+		try {
+			StringBuffer buffer = new StringBuffer();
+			String line;
+
+			while ((line = this.bufferedReader.readLine()) != null) {
+				buffer.append(line);
+			}
+			this.resultJson = buffer.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return this.resultJson;
 	}
 }
