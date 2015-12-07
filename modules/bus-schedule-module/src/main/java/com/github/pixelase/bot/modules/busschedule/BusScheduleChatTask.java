@@ -1,9 +1,8 @@
 package com.github.pixelase.bot.modules.busschedule;
 
-import java.util.Arrays;
-
+import java.net.MalformedURLException;
 import com.github.pixelase.bot.api.ChatTask;
-import com.github.pixelase.bot.utils.emoji.Emoji;
+import com.github.pixelase.bus.api.parser.ConsoleChecker;
 import com.pengrad.telegrambot.model.Chat;
 
 public class BusScheduleChatTask extends ChatTask {
@@ -20,7 +19,12 @@ public class BusScheduleChatTask extends ChatTask {
 		while (isRunning()) {
 			sleep(chatTaskDelay);
 			if (isMessageUpdated()) {
-				bot.sendMessage(currentMessage.chat().id(), Arrays.toString(Emoji.values()), null, null, null, null);
+				try {
+					bot.sendMessage(currentMessage.chat().id(), ConsoleChecker.result());
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.printf("From %s task(%s): %s - %s\n", chat.username(), this.hashCode(), currentMessage.text(), currentMessage.messageId());
 			}
 		}

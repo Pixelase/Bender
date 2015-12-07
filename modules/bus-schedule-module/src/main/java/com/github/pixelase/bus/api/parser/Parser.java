@@ -1,17 +1,18 @@
 package com.github.pixelase.bus.api.parser;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
+import com.github.pixelase.bus.api.model.Trip;
 import com.github.pixelase.bus.api.utils.HttpUtils;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /*
  * Parser has method parse, that should be convert needed parts of Json
- * to my own class Trip with some fields
+ * to list of my own class Trip with some fields.
  */
 
 public class Parser {
@@ -29,6 +30,7 @@ public class Parser {
 		this.object = parser.parse(this.json);
 		this.jsonObj = (JsonObject) object;
 		this.threads = jsonObj.getAsJsonArray("threads");
+
 	}
 
 	public JsonObject getJsonObj() {
@@ -71,26 +73,15 @@ public class Parser {
 		this.httpUtils = httpUtils;
 	}
 
-	public void parse() {
+	public void parse(List<Trip> trips) {
 		try {
 			for (int i = 0; i < threads.size(); i++) {
 				JsonObject thread = (JsonObject) this.threads.get(i);
 				JsonObject trip = (JsonObject) thread.get("thread");
-
-				JsonElement title = trip.get("title");
-				JsonElement arrival = thread.get("arrival");
-
-				System.out.println("title: " + title);
-				System.out.println("arrival: " + arrival);
+				trips.add(new Trip(trip.get("title").getAsString(), thread.get("arrival").getAsString()));
 			}
 		} catch (JsonIOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "Parser [jsonObj=" + jsonObj + ", parser=" + parser + ", object=" + object + ", json=" + json
-				+ ", httpUtils=" + httpUtils + "]";
 	}
 }
