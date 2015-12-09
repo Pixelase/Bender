@@ -44,7 +44,7 @@ public class ScheduleImpl implements Schedule {
 	}
 
 	private String convertListToString(List<Trip> trips, String request) {
-		if ("today".equals(request)) {
+		if ("now".equals(request)) {
 			return convertListToStringWithNext(trips);
 		} else {
 			return convertListToStringWithoutNext(trips);
