@@ -21,7 +21,7 @@ public class HttpUtils {
 
 	private void urlInit() throws MalformedURLException {
 		//this.url = new URL(Api.EXAMPLE_URL);
-		this.url = new URL(Api.BASE_URL);
+		this.url = new URL(Api.URL);
 	}
 
 	private void urlConnectionInit() throws IOException {
