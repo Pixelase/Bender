@@ -78,7 +78,8 @@ public class Parser {
 			for (int i = 0; i < threads.size(); i++) {
 				JsonObject thread = (JsonObject) this.threads.get(i);
 				JsonObject trip = (JsonObject) thread.get("thread");
-				trips.add(new Trip(trip.get("title").getAsString(), thread.get("arrival").getAsString()));
+				trips.add(new Trip(trip.get("title").getAsString(), thread.get("departure").getAsString(),
+						thread.get("arrival").getAsString()));
 			}
 		} catch (JsonIOException e) {
 			e.printStackTrace();

@@ -19,8 +19,7 @@ public class HttpUtils {
 	private String resultJson;
 	private URL url;
 
-	private void urlInit() throws MalformedURLException {
-		//this.url = new URL(Api.EXAMPLE_URL);
+	public void urlInit() throws MalformedURLException {
 		this.url = new URL(Api.URL);
 	}
 

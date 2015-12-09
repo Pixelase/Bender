@@ -19,7 +19,7 @@ public class BusScheduleChatTask extends ChatTask {
 			if (isMessageUpdated()) {
 				try {
 					if (currentMessage.text().startsWith("/today")) {
-						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule());
+						bot.sendMessage(currentMessage.chat().id(), schedule.getScheduleForToday());
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
