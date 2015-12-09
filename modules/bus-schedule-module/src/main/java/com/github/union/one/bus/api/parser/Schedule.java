@@ -22,7 +22,9 @@ public class Schedule {
 		return convertListToString(trips);
 	}
 
+	// пу сути сюда надо передавать код. но API по кодам пунктов нет
 	public String getScheduleForToday() {
+		Api.updateURL("s9757747", "c10274");
 		String scheduleFrom = getSchedule();
 		Api.updateURL("c10274", "s9757747");
 		String scheduleTo = getSchedule();
