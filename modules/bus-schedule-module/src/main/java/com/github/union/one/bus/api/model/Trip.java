@@ -1,4 +1,4 @@
-package com.github.pixelase.bus.api.model;
+package com.github.union.one.bus.api.model;
 
 public class Trip {
 	private String title;
@@ -31,6 +31,6 @@ public class Trip {
 
 	@Override
 	public String toString() {
-		return "Trip [title=" + title + ", arrival=" + arrival + "]";
+		return "\n" + title + "  " + arrival;
 	}
 }

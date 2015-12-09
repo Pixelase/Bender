@@ -1,4 +1,4 @@
-package com.github.pixelase.bot.modules.busschedule;
+package com.github.union.one.bot.modules.busschedule;
 
 import java.io.IOException;
 

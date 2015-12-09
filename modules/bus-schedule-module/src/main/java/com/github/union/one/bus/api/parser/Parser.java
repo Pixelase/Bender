@@ -1,10 +1,10 @@
-package com.github.pixelase.bus.api.parser;
+package com.github.union.one.bus.api.parser;
 
 import java.net.MalformedURLException;
 import java.util.List;
 
-import com.github.pixelase.bus.api.model.Trip;
-import com.github.pixelase.bus.api.utils.HttpUtils;
+import com.github.union.one.bus.api.model.Trip;
+import com.github.union.one.bus.api.utils.HttpUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
