@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.github.union.one.bus.api.core.Parser;
+import com.github.union.one.bus.api.core.Schedule;
 import com.github.union.one.bus.api.model.Trip;
-import com.github.union.one.bus.api.parser.ParserImpl;
+import com.github.union.one.bus.api.parser.YandexApiParser;
 import com.github.union.one.bus.api.utils.Api;
 
 public class ScheduleImpl implements Schedule {
@@ -36,7 +38,7 @@ public class ScheduleImpl implements Schedule {
 
 	private void updateParser(List<Trip> trips) {
 		try {
-			ParserImpl updateParser = new ParserImpl();
+			Parser updateParser = new YandexApiParser();
 			updateParser.parse(trips);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

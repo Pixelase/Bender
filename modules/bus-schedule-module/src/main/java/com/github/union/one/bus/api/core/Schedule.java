@@ -1,4 +1,4 @@
-package com.github.union.one.bus.api.schedule;
+package com.github.union.one.bus.api.core;
 
 public interface Schedule {
 	public String getSchedule(String request);
