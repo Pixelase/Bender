@@ -4,30 +4,28 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import com.github.union.one.bus.api.core.Parser;
-import com.github.union.one.bus.api.model.Trip;
+import com.github.union.one.bus.api.model.Code;
 import com.github.union.one.bus.api.utils.Api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 
-public class YandexApiParser extends Parser<Trip> {
+public class CodeParser extends Parser<Code> {
 	private JsonArray threads;
 
-	public YandexApiParser() throws MalformedURLException {
-		super(Api.URL);
-		this.threads = super.getJsonObj().getAsJsonArray("threads");
+	public CodeParser() throws MalformedURLException {
+		super(Api.CODES_URL);
+		this.threads = super.getJsonObj().getAsJsonArray("codes");
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void parse(List<Trip> trips) {
+	public void parse(List<Code> codes) {
 		// TODO Auto-generated method stub
 		try {
 			for (int i = 0; i < threads.size(); i++) {
 				JsonObject thread = (JsonObject) this.threads.get(i);
-				JsonObject trip = (JsonObject) thread.get("thread");
-				trips.add(new Trip(trip.get("title").getAsString(), thread.get("departure").getAsString(),
-						thread.get("arrival").getAsString()));
+				codes.add(new Code(thread.get("name").getAsString(), thread.get("code").getAsString()));
 			}
 		} catch (JsonIOException e) {
 			e.printStackTrace();
@@ -58,7 +56,7 @@ public class YandexApiParser extends Parser<Trip> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		YandexApiParser other = (YandexApiParser) obj;
+		CodeParser other = (CodeParser) obj;
 		if (threads == null) {
 			if (other.threads != null)
 				return false;
@@ -69,6 +67,6 @@ public class YandexApiParser extends Parser<Trip> {
 
 	@Override
 	public String toString() {
-		return "YandexApiParser [threads=" + threads + "]";
+		return "CodeParser [threads=" + threads + "]";
 	}
 }

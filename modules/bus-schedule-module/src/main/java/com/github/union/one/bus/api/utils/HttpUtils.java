@@ -19,8 +19,8 @@ public class HttpUtils {
 	private String resultJson;
 	private URL url;
 
-	public void urlInit() throws MalformedURLException {
-		this.url = new URL(Api.URL);
+	public void urlInit(String url) throws MalformedURLException {
+		this.url = new URL(url);
 	}
 
 	private void urlConnectionInit() throws IOException {
@@ -34,9 +34,9 @@ public class HttpUtils {
 		this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 	}
 	
-	public HttpUtils() throws MalformedURLException {
+	public HttpUtils(String url) throws MalformedURLException {
 		try {
-			urlInit();
+			urlInit(url);
 			urlConnectionInit();
 			bufferedReaderInit();
 			this.resultJson = "";

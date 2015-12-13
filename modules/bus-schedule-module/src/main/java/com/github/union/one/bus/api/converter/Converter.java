@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.union.one.bus.api.model.Code;
-import com.github.union.one.bus.api.model.CodeManager;
 
 public class Converter {
 	static final String TXT_FILE = "";
-	
+
 	static final String JSON_FILE = "";
-	
+
 	public static <T> void printList(List<T> items) {
 		for (T item : items) {
 			System.out.println(item);
@@ -34,7 +33,7 @@ public class Converter {
 
 		System.out.println("\n\nOriginal persons:");
 		printList(manager.getCodes());
-		
+
 		manager.updateOrCreateBase();
 	}
 }

@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.Chat;
 
 public class BusScheduleChatTask extends ChatTask {
 
-	Schedule schedule = new ScheduleImpl();
+	private Schedule schedule = new ScheduleImpl();
 
 	public BusScheduleChatTask(Chat chat) {
 		super(chat);
@@ -20,9 +20,9 @@ public class BusScheduleChatTask extends ChatTask {
 			if (isMessageUpdated()) {
 				try {
 					if (currentMessage.text().startsWith("/now")) {
-						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("now"));
+						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("now", "s9757747", "c10274"));
 					} else if (currentMessage.text().startsWith("/today")) {
-						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("today"));
+						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("today", "s9757747", "c10274"));
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

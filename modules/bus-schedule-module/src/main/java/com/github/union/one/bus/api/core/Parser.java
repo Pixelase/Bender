@@ -3,27 +3,26 @@ package com.github.union.one.bus.api.core;
 import java.net.MalformedURLException;
 import java.util.List;
 
-import com.github.union.one.bus.api.model.Trip;
 import com.github.union.one.bus.api.utils.HttpUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public abstract class Parser {
+public abstract class Parser<T> {
 	private JsonObject jsonObj;
 	private JsonParser parser;
 	private Object object;
 	private String json;
 	private HttpUtils httpUtils;
 
-	public Parser() throws MalformedURLException {
-		this.httpUtils = new HttpUtils();
+	public Parser(String url) throws MalformedURLException {
+		this.httpUtils = new HttpUtils(url);
 		this.json = this.httpUtils.getJson();
 		this.parser = new JsonParser();
 		this.object = parser.parse(this.json);
 		this.jsonObj = (JsonObject) object;
 	}
 
-	public abstract void parse(List<Trip> trips);
+	public abstract void parse(List<T> trips);
 
 	public JsonObject getJsonObj() {
 		return jsonObj;
@@ -85,6 +84,7 @@ public abstract class Parser {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		@SuppressWarnings("rawtypes")
 		Parser other = (Parser) obj;
 		if (httpUtils == null) {
 			if (other.httpUtils != null)

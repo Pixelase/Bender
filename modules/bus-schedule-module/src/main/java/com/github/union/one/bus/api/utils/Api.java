@@ -31,5 +31,5 @@ public class Api {
 	public static String URL = BASE_URL + "?apikey=" + API_KEY + "&" + FORMAT + "&from=" + FROM + "&to=" + TO + "&"
 			+ LANG + "&" + PAGE + "&" + DATE;
 	
-	public static final String CODES_URL = "https://gist.githubusercontent.com/UnionOne/cadac50d1e4c38af3d8f/raw/b66696d6cd9544c28e97be99760362cf969c7ef6/codes.json";
+	public static String CODES_URL = "https://gist.githubusercontent.com/UnionOne/cadac50d1e4c38af3d8f/raw/604f06651d2954506bcbf4e735eb59475a40578e/codes.json";
 }

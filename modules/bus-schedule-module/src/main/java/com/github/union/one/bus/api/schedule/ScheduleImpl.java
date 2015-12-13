@@ -21,10 +21,10 @@ public class ScheduleImpl implements Schedule {
 	
 	// пу сути сюда надо передавать код. но API по кодам пунктов нет
 	@Override
-	public String getSchedule(String request) {
-		Api.updateURL("s9757747", "c10274");
+	public String getSchedule(String request, String from, String to) {
+		Api.updateURL(from, to);
 		String scheduleFrom = updateSchedule(request);
-		Api.updateURL("c10274", "s9757747");
+		Api.updateURL(to, from);
 		String scheduleTo = updateSchedule(request);
 		//clean();
 		return scheduleFrom + "\n" + scheduleTo;
@@ -38,7 +38,7 @@ public class ScheduleImpl implements Schedule {
 
 	private void updateParser(List<Trip> trips) {
 		try {
-			Parser updateParser = new YandexApiParser();
+			Parser<Trip> updateParser = new YandexApiParser();
 			updateParser.parse(trips);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

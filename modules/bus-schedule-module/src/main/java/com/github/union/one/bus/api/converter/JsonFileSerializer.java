@@ -1,4 +1,4 @@
-package com.github.union.one.bus.api.serializer;
+package com.github.union.one.bus.api.converter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.github.union.one.bus.api.core.Serializer;
 import com.google.gson.Gson;
 
 public class JsonFileSerializer implements Serializer {

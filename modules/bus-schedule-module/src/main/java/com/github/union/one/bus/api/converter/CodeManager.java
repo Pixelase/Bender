@@ -1,4 +1,4 @@
-package com.github.union.one.bus.api.model;
+package com.github.union.one.bus.api.converter;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.union.one.bus.api.core.Serializer;
-import com.github.union.one.bus.api.serializer.JsonFileSerializer;
+import com.github.union.one.bus.api.model.Code;
 
 public class CodeManager {
 	private List<Code> codes;
