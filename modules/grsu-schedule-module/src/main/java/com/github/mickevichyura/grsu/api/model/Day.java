@@ -1,6 +1,10 @@
 package com.github.mickevichyura.grsu.api.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+import com.github.mickevichyura.grsu.api.utils.DateFormat;
 
 public class Day {
 
@@ -11,22 +15,21 @@ public class Day {
 		return date;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	public List<Lesson> getLessons() {
 		return lessons;
-	}
-
-	public void setLessons(List<Lesson> lessons) {
-		this.lessons = lessons;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(date + "\n");
+		DateFormat.DATE_FORMAT.applyPattern(DateFormat.DAY_OF_WEEK_PATTERN + " " + DateFormat.DATE_FORMAT_PATTERN);
+		
+		try {
+			String formatDate = DateFormat.DATE_FORMAT.format(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+			sb.append("*" +  formatDate.toUpperCase() + "*" + "\n");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		for (Lesson lesson : lessons) {
 			if (!(lesson.getTitle().contains("Физическая культура")

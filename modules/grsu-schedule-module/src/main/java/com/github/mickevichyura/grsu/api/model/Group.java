@@ -1,24 +1,25 @@
 package com.github.mickevichyura.grsu.api.model;
 
-public class Subgroup {
+import com.google.gson.annotations.SerializedName;
+
+public class Group {
 
 	private String id;
 	private String title;
+	
+	@SerializedName("students")
+	private Integer amountOfStudents;
+
+	public Integer getAmountOfStudents() {
+		return amountOfStudents;
+	}
 
 	public String getId() {
 		return id;
 	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
+	
 	public String getTitle() {
 		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	@Override

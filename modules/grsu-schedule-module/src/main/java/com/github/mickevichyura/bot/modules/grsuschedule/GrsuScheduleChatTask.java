@@ -25,7 +25,6 @@ public class GrsuScheduleChatTask extends ChatTask {
 		personsMap = new HashMap<>();
 		personsMap.put("Студент", new Student());
 		personsMap.put("Преподаватель", new Teacher());
-
 		persons = new String[1][2];
 		persons[0] = new String[] { "Студент", "Преподаватель" };
 	}
@@ -39,7 +38,6 @@ public class GrsuScheduleChatTask extends ChatTask {
 			sleep(chatTaskDelay);
 
 			if (isMessageUpdated()) {
-
 				if (person == null || currentMessage.text().startsWith("/settings")) {
 					Keyboard keyboard = new ReplyKeyboardMarkup(persons, true, false, false);
 					person = personsMap.get(currentMessage.text());
@@ -64,7 +62,7 @@ public class GrsuScheduleChatTask extends ChatTask {
 					}
 				}
 
-				System.out.printf("From %s(%s) task(%s): %s\n", chat.title(), chat.username(), this.hashCode(),
+				System.out.printf("From %s(%s) task(%s): %s\n", chat.title(), currentMessage.from().username(), this.hashCode(),
 						currentMessage.text());
 			}
 		}

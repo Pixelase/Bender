@@ -1,10 +1,13 @@
 package com.github.mickevichyura.bot.modules.grsuschedule.persons;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import com.github.mickevichyura.grsu.api.model.Day;
 import com.github.mickevichyura.grsu.api.response.BaseResponse;
 import com.github.mickevichyura.grsu.api.response.DayResponse;
 import com.github.mickevichyura.grsu.api.response.GetModels;
@@ -13,9 +16,9 @@ import com.github.mickevichyura.grsu.api.utils.DateFormat;
 import com.github.pixelase.bot.utils.emoji.Emoji;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.request.ForceReply;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardHide;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
 public class Student implements Person {
@@ -83,13 +86,13 @@ public class Student implements Person {
 			break;
 		}
 
-		Keyboard rkm = null;
+		Keyboard keyboard = null;
 
 		if (!isConfig) {
 			baseResponse = GetModels.getModels(url);
 			String[][] array = baseResponse.itemsToStringArray(2);
 			
-			rkm = new ReplyKeyboardMarkup(array, true, false, false);
+			keyboard = new ReplyKeyboardMarkup(array, true, false, false);
 			
 			if(settings.size() == 2){
 				String keycap = "KEYCAP";
@@ -107,11 +110,11 @@ public class Student implements Person {
 				}
 			}
 		} else {
-			rkm = new ForceReply();
+			keyboard = new ReplyKeyboardHide();
 			sendMessage = currentMessage.text();
 		}
 
-		bot.sendMessage(currentMessage.chat().id(), sendMessage, ParseMode.Markdown, null, null, rkm);
+		bot.sendMessage(currentMessage.chat().id(), sendMessage, ParseMode.Markdown, null, null, keyboard);
 		if (isConfig) {
 			sendSchedule(bot, currentMessage, 0);
 		}
@@ -121,12 +124,15 @@ public class Student implements Person {
 	public void sendSchedule(TelegramBot bot, Message currentMessage, int day) {
 		TimeUnit t = TimeUnit.MILLISECONDS;
 		long daySeconds = t.convert(1L, TimeUnit.DAYS);
-
+		DateFormat.DATE_FORMAT.applyPattern(DateFormat.DATE_FORMAT_PATTERN);	
 		Date date = new Date(t.convert(currentMessage.date(), TimeUnit.SECONDS) + daySeconds * day);
 		DayResponse groupSchedule = GetModels.getModels(Api.groupSchedule(settings.get(3)) + DateFormat.DATE_FORMAT.format(date),
 				DayResponse.class);
-
-		String markdown = groupSchedule.getDays().get(0).toString();
-		bot.sendMessage(currentMessage.chat().id(), markdown, ParseMode.Markdown, null, null, null);
+		
+		String sсhedule = groupSchedule.getDays().get(0).toString();
+		for (Day daySchedule : groupSchedule.getDays()) {
+			bot.sendMessage(currentMessage.chat().id(), daySchedule.toString(), ParseMode.Markdown, null, null, null);
+		}
+		
 	}
 }
