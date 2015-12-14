@@ -80,11 +80,15 @@ public class Teacher implements Person {
 		Date date = new Date(t.convert(currentMessage.date(), TimeUnit.SECONDS) + daySeconds * day);
 		DayResponse teacherSchedule = GetModels
 				.getModels(Api.teacherSchedule(teacherId) + DateFormat.DATE_FORMAT.format(date), DayResponse.class);
-
-		String sсhedule = teacherSchedule.getDays().get(0).toString();
-		for (Day daySchedule : teacherSchedule.getDays()) {
-			bot.sendMessage(currentMessage.chat().id(), daySchedule.toString(), ParseMode.Markdown, null, null, null);
+		
+		if(currentMessage.text().startsWith("/week")){
+			for (Day daySchedule : teacherSchedule.getDays()) {
+				bot.sendMessage(currentMessage.chat().id(), daySchedule.toString(), ParseMode.Markdown, null, null, null);
+			}
+			return;
 		}
+		String sсhedule = teacherSchedule.getDays().get(0).toString();
+		bot.sendMessage(currentMessage.chat().id(), sсhedule.toString(), ParseMode.Markdown, null, null, null);
 
 	}
 
