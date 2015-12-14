@@ -22,10 +22,12 @@ public class CodeParser extends Parser<Code> {
 	@Override
 	public void parse(List<Code> codes) {
 		// TODO Auto-generated method stub
+		//Map<String, String> map = new HashMap<>();
 		try {
 			for (int i = 0; i < threads.size(); i++) {
 				JsonObject thread = (JsonObject) this.threads.get(i);
 				codes.add(new Code(thread.get("name").getAsString(), thread.get("code").getAsString()));
+				//map.put(thread.get("name").getAsString(), thread.get("code").getAsString());
 			}
 		} catch (JsonIOException e) {
 			e.printStackTrace();
@@ -38,31 +40,6 @@ public class CodeParser extends Parser<Code> {
 
 	public void setThreads(JsonArray threads) {
 		this.threads = threads;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((threads == null) ? 0 : threads.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CodeParser other = (CodeParser) obj;
-		if (threads == null) {
-			if (other.threads != null)
-				return false;
-		} else if (!threads.equals(other.threads))
-			return false;
-		return true;
 	}
 
 	@Override

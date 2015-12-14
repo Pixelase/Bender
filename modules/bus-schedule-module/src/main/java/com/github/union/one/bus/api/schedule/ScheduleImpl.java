@@ -19,15 +19,14 @@ public class ScheduleImpl implements Schedule {
 		this.trips = new ArrayList<>();
 	}
 	
-	// пу сути сюда надо передавать код. но API по кодам пунктов нет
 	@Override
 	public String getSchedule(String request, String from, String to) {
 		Api.updateURL(from, to);
 		String scheduleFrom = updateSchedule(request);
-		Api.updateURL(to, from);
-		String scheduleTo = updateSchedule(request);
+		//Api.updateURL(to, from);
+		//String scheduleTo = updateSchedule(request);
 		//clean();
-		return scheduleFrom + "\n" + scheduleTo;
+		return scheduleFrom; //+ "\n" + scheduleTo;
 	}
 	
 	private String updateSchedule(String request) {

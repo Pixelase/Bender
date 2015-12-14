@@ -65,56 +65,6 @@ public abstract class Parser<T> {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((httpUtils == null) ? 0 : httpUtils.hashCode());
-		result = prime * result + ((json == null) ? 0 : json.hashCode());
-		result = prime * result + ((jsonObj == null) ? 0 : jsonObj.hashCode());
-		result = prime * result + ((object == null) ? 0 : object.hashCode());
-		result = prime * result + ((parser == null) ? 0 : parser.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		@SuppressWarnings("rawtypes")
-		Parser other = (Parser) obj;
-		if (httpUtils == null) {
-			if (other.httpUtils != null)
-				return false;
-		} else if (!httpUtils.equals(other.httpUtils))
-			return false;
-		if (json == null) {
-			if (other.json != null)
-				return false;
-		} else if (!json.equals(other.json))
-			return false;
-		if (jsonObj == null) {
-			if (other.jsonObj != null)
-				return false;
-		} else if (!jsonObj.equals(other.jsonObj))
-			return false;
-		if (object == null) {
-			if (other.object != null)
-				return false;
-		} else if (!object.equals(other.object))
-			return false;
-		if (parser == null) {
-			if (other.parser != null)
-				return false;
-		} else if (!parser.equals(other.parser))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Parser [jsonObj=" + jsonObj + ", parser=" + parser + ", object=" + object + ", json=" + json
 				+ ", httpUtils=" + httpUtils + "]";
