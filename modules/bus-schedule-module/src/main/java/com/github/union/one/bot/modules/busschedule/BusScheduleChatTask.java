@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import com.github.pixelase.bot.api.ChatTask;
+import com.github.union.one.bot.modules.busschedule.manager.Answer;
 import com.github.union.one.bot.modules.busschedule.manager.Manager;
 import com.github.union.one.bus.api.core.Schedule;
 import com.github.union.one.bus.api.model.Code;
@@ -23,6 +24,7 @@ public class BusScheduleChatTask extends ChatTask {
 	private CodeParser parser;
 	private String from;
 	private String to;
+	private String type;
 
 	public BusScheduleChatTask(Chat chat) {
 		super(chat);
@@ -39,56 +41,61 @@ public class BusScheduleChatTask extends ChatTask {
 		parser.parse(codes);
 
 		state = new String[1][1];
-		state[0] = new String[] { "Коммунист", "Капиталист" };
+		state[0] = new String[] { Answer.NOW, Answer.TODAY };
 		station = Manager.convertToTwoDimension(codes);
+		type = "";
 
 	}
 
 	@Override
 	public void run() {
-		bot.sendMessage(currentMessage.chat().id(), "Вас приветствует Председатель СНК СССР! Чего изволите, товарищ?");
-		Keyboard keyboard = new ReplyKeyboardMarkup(state, true, false, false);
-		Keyboard keyboard2 = new ReplyKeyboardMarkup(station, true, false, false);
-		bot.sendMessage(currentMessage.chat().id(), "Выберите сторону", ParseMode.Markdown, null, null, keyboard);
+		bot.sendMessage(currentMessage.chat().id(), Answer.WELCOME);
+		Keyboard stateKeyboard = new ReplyKeyboardMarkup(state, true, false, false);
+		Keyboard stationKeyboard = new ReplyKeyboardMarkup(station, true, false, false);
+		bot.sendMessage(currentMessage.chat().id(), Answer.TYPE_SCHEDULE, ParseMode.Markdown, null, null, stateKeyboard);
 		while (isRunning()) {
 			sleep(chatTaskDelay);
 			if (isMessageUpdated()) {
 				try {
-					if (currentMessage.text().startsWith("Коммунист")) {
-						bot.sendMessage(currentMessage.chat().id(), "Выбирайте откуда начнется революция!!!",
-								ParseMode.Markdown, null, null, keyboard2);
-					}
-
+					if (currentMessage.text().startsWith(Answer.NOW) || currentMessage.text().startsWith(Answer.TODAY)) {
+						if (currentMessage.text().startsWith(Answer.NOW)) {
+							type = "now";
+						} else if (currentMessage.text().startsWith(Answer.TODAY)) {
+							type = "today";
+						}
+						bot.sendMessage(currentMessage.chat().id(), Answer.FROM,
+								ParseMode.Markdown, null, null, stationKeyboard);
+					} 
 					if (currentMessage.text().startsWith("/now")) {
 						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("now", "s9757747", "c10274"));
 						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("now", "c10274", "s9757747"));
-						bot.sendMessage(currentMessage.chat().id(), "Время не ждет, я понимаю!");
 					} else if (currentMessage.text().startsWith("/today")) {
 						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("today", "s9757747", "c10274"));
 						bot.sendMessage(currentMessage.chat().id(), schedule.getSchedule("today", "c10274", "s9757747"));
-						bot.sendMessage(currentMessage.chat().id(), "А вы свой человек, как я посмотрю, товарищ...");
 					} else {
 						for (Code code : codes) {
 							if (currentMessage.text().startsWith(code.getName())) {
 								if ("".equals(from)) {
 									from = code.getCode();
-									bot.sendMessage(currentMessage.chat().id(), "Кого захлеснет красная смерть?", ParseMode.Markdown, null, null,
-											keyboard2);
+									bot.sendMessage(currentMessage.chat().id(), Answer.TO, ParseMode.Markdown, null, null,
+											stationKeyboard);
 								} else {
 									to = code.getCode();
 									bot.sendMessage(currentMessage.chat().id(),
-											schedule.getSchedule("today", from, to));
+											schedule.getSchedule(type, from, to));
 									from = "";
 									to = "";
-									bot.sendMessage(currentMessage.chat().id(), "Выберите сторону", ParseMode.Markdown,
-											null, null, keyboard);
+									bot.sendMessage(currentMessage.chat().id(), Answer.TYPE_SCHEDULE, ParseMode.Markdown,
+											null, null, stateKeyboard);
 								}
 							}
 						}
-					}
+					} 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					bot.sendMessage(currentMessage.chat().id(), Answer.SORRY);
+					bot.sendMessage(currentMessage.chat().id(), Answer.TO);
 				}
 				System.out.printf("From %s task(%s): %s - %s\n", chat.username(), this.hashCode(),
 						currentMessage.text(), currentMessage.messageId());

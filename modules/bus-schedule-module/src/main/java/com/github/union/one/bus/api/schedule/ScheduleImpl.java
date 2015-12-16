@@ -23,10 +23,7 @@ public class ScheduleImpl implements Schedule {
 	public String getSchedule(String request, String from, String to) {
 		Api.updateURL(from, to);
 		String scheduleFrom = updateSchedule(request);
-		//Api.updateURL(to, from);
-		//String scheduleTo = updateSchedule(request);
-		//clean();
-		return scheduleFrom; //+ "\n" + scheduleTo;
+		return scheduleFrom; 
 	}
 	
 	private String updateSchedule(String request) {
