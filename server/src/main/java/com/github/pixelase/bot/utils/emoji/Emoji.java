@@ -1,4 +1,5 @@
 package com.github.pixelase.bot.utils.emoji;
+
 /**
  * @author Ruben Bermudez
  * @version 1.0
@@ -6,7 +7,7 @@ package com.github.pixelase.bot.utils.emoji;
  * @date 02 of July of 2015
  */
 public enum Emoji {
-	//Digits
+    //Digits
     KEYCAP0('\u0030', '\u20e3'),
     KEYCAP1('\u0031', '\u20e3'),
     KEYCAP2('\u0032', '\u20e3'),
@@ -16,8 +17,8 @@ public enum Emoji {
     KEYCAP6('\u0036', '\u20e3'),
     KEYCAP7('\u0037', '\u20e3'),
     KEYCAP8('\u0038', '\u20e3'),
-	KEYCAP9('\u0039', '\u20e3'),
-	
+    KEYCAP9('\u0039', '\u20e3'),
+
     // Emoticones group
     GRINNING_FACE_WITH_SMILING_EYES('\uD83D', '\uDE01'),
     FACE_WITH_TEARS_OF_JOY('\uD83D', '\uDE02'),
@@ -182,17 +183,17 @@ public enum Emoji {
     Emoji(Character firstChar, Character secondChar) {
         this.firstChar = firstChar;
         this.secondChar = secondChar;
-    }    
+    }
 
     public Character getFirstChar() {
-		return firstChar;
-	}
+        return firstChar;
+    }
 
-	public Character getSecondChar() {
-		return secondChar;
-	}
+    public Character getSecondChar() {
+        return secondChar;
+    }
 
-	@Override
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

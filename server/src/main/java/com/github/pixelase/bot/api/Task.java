@@ -5,42 +5,43 @@ import com.pengrad.telegrambot.model.Message;
 
 public abstract class Task implements Runnable {
 
-	protected static TelegramBot bot;
-	protected static Message commonMessage;
-	protected static boolean isOk;
-	protected static long taskDelay;
-	private Message tempMessage;
+    protected static TelegramBot bot;
+    protected static Message commonMessage;
+    protected static boolean isOk;
+    protected static long taskDelay;
 
-	static {
-		commonMessage = null;
-		isOk = true;
-	}
+    static {
+        commonMessage = null;
+        isOk = true;
+    }
 
-	public static long getTaskDelay() {
-		return taskDelay;
-	}
+    private Message tempMessage;
 
-	public static void setTaskDelay(long taskDelay) {
-		Task.taskDelay = taskDelay;
-	}
+    public static long getTaskDelay() {
+        return taskDelay;
+    }
 
-	protected boolean isCommonMessageUpdated() {
-		if (commonMessage.equals(tempMessage)) {
-			return false;
-		}
-		tempMessage = commonMessage;
-		return true;
-	}
+    public static void setTaskDelay(long taskDelay) {
+        Task.taskDelay = taskDelay;
+    }
 
-	protected void sleep(long millis) {
-		/*
+    protected boolean isCommonMessageUpdated() {
+        if (commonMessage.equals(tempMessage)) {
+            return false;
+        }
+        tempMessage = commonMessage;
+        return true;
+    }
+
+    protected void sleep(long millis) {
+        /*
 		 * Hot fix
 		 */
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
